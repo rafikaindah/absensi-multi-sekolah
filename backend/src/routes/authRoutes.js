@@ -1,8 +1,7 @@
 const express = require('express'); //mengimpor express
-const router = express.Router(); //membuat router baru
+const router = express.Router(); //membuat router express
+const { login } = require('../controllers/authController'); //mengimpor controller otentikasi
 
-router.get('/test', (req, res) => { //menangani permintaan GET ke /test
-  res.json({ message: 'Auth route OK' }); //mengirim respons JSON
-});
+router.post('/login', login); //route untuk login
 
-module.exports = router; //mengekspor router untuk digunakan di bagian lain aplikasi
+module.exports = router; //mengekspor router
