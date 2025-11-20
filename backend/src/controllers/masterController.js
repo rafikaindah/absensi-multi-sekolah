@@ -101,3 +101,108 @@ exports.deletePengguna = async (req, res) => { //menghapus data pengguna berdasa
   }
 };
 // ------------------ AKHIR PENGGUNA ------------------
+
+// ------------------ KELAS ------------------
+//mendapatkan semua data kelas
+exports.getKelas = async (req, res) => { 
+  try {
+    const [rows] = await pool.query(
+      `SELECT k.*, s.nama_sekolah 
+       FROM kelas k
+       JOIN sekolah s ON k.id_sekolah = s.id_sekolah
+       ORDER BY s.nama_sekolah, k.tingkat, k.nama_kelas`
+    ); //menjalankan query untuk mendapatkan semua data kelas dengan nama sekolah
+    res.json(rows); //mengirim respons dengan data kelas dalam format JSON
+  } catch (err) { //menangani kesalahan
+    res.status(500).json({ message: 'Gagal mengambil data kelas' }); //mengirim respons 500 dengan pesan error
+  }
+};
+
+//mendapatkan data kelas berdasarkan id sekolah
+exports.getKelasBySekolah = async (req, res) => {
+  const { id } = req.params; //mengambil id dari parameter rute
+
+  try {
+    const [rows] = await pool.query( //menjalankan query untuk mendapatkan data kelas berdasarkan id sekolah
+      `SELECT * FROM kelas 
+       WHERE id_sekolah = ?
+       ORDER BY tingkat, nama_kelas`,
+      [id]
+    ); //
+
+    res.json(rows); //mengirim respons dengan data kelas dalam format JSON
+  } catch (err) { //menangani kesalahan
+    res.status(500).json({ message: 'Gagal mengambil kelas per sekolah' }); //mengirim respons 500 dengan pesan error
+  }
+};
+
+//membuat data kelas baru
+exports.createKelas = async (req, res) => { //membuat data kelas baru
+  const { id_sekolah, nama_kelas, tingkat } = req.body; //mengambil data dari body permintaan
+
+  try { //menambahkan kelas baru ke database
+    const [cek] = await pool.query( //memeriksa apakah sekolah dengan id_sekolah ada
+      `SELECT id_sekolah FROM sekolah WHERE id_sekolah=?`,
+      [id_sekolah]
+    );
+    if (cek.length === 0) { // mengecek apakah sekolah dengan id_sekolah tidak ditemukan
+      return res.status(400).json({ message: 'Sekolah tidak ditemukan' }); //mengirim respons 400 jika sekolah tidak ditemukan
+    }
+
+    const [result] = await pool.query( //menjalankan query untuk memasukkan data kelas baru
+      `INSERT INTO kelas (id_sekolah, nama_kelas, tingkat)
+       VALUES (?, ?, ?)`,
+       [id_sekolah, nama_kelas, tingkat]
+    );
+
+    res.status(201).json({ //mengirim respons 201 dengan id kelas yang baru dibuat
+      message: 'Kelas berhasil ditambahkan',
+      id_kelas: result.insertId 
+    });
+
+  } catch (err) { //menangani kesalahan
+    res.status(500).json({ message: 'Gagal menambah kelas' }); // mengirim respons 500 dengan pesan error
+  }
+};
+
+//memperbarui data kelas berdasarkan id
+exports.updateKelas = async (req, res) => { //memperbarui data kelas berdasarkan id
+  const { id } = req.params; //mengambil id dari parameter rute
+  const { id_sekolah, nama_kelas, tingkat } = req.body; //mengambil data dari body permintaan
+
+  try { //memperbarui data kelas di database
+    const [cek] = await pool.query( //memeriksa apakah kelas dengan id_kelas ada
+      `SELECT id_kelas FROM kelas WHERE id_kelas=?`,
+      [id]
+    );
+    if (cek.length === 0) { // mengecek apakah kelas dengan id_kelas tidak ditemukan
+      return res.status(404).json({ message: 'Kelas tidak ditemukan' }); //mengirim respons 404 jika kelas tidak ditemukan
+    }
+
+    await pool.query( //menjalankan query untuk memperbarui data kelas
+      `UPDATE kelas
+       SET id_sekolah=?, nama_kelas=?, tingkat=?
+       WHERE id_kelas=?`,
+       [id_sekolah, nama_kelas, tingkat, id] //nilai yang akan diperbarui
+    );
+
+    res.json({ message: 'Kelas berhasil diperbarui' }); //mengirim respons sukses
+
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal update kelas' }); //mengirim respons 500 dengan pesan error
+  }
+};
+
+//menghapus data kelas berdasarkan id
+exports.deleteKelas = async (req, res) => { //menghapus data kelas berdasarkan id
+  const { id } = req.params; //mengambil id dari parameter rute
+
+  try {
+    await pool.query(`DELETE FROM kelas WHERE id_kelas=?`, [id]); //menjalankan query untuk menghapus data kelas berdasarkan id
+    res.json({ message: 'Kelas berhasil dihapus' }); //mengirim respons sukses
+  } catch (err) { //menangani kesalahan
+    res.status(500).json({ message: 'Gagal menghapus kelas' }); //mengirim respons 500 dengan pesan error
+  }
+};
+
+// ------------------ AKHIR KELAS ------------------
