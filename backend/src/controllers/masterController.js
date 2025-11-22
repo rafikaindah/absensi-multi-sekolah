@@ -288,3 +288,66 @@ exports.deleteSiswa = async (req, res) => { //menghapus data siswa berdasarkan i
   }
 };
 // ------------------ AKHIR SISWA ------------------
+
+// ------------------ MAPEL ------------------
+//mendapatkan semua data mata pelajaran
+exports.getMapel = async (req, res) => {
+  try {
+    const [rows] = await pool.query(//menjalankan query untuk mendapatkan semua data mata pelajaran
+      `SELECT * FROM mata_pelajaran
+       ORDER BY nama_mapel`
+    );
+    res.json(rows); //mengirim respons dengan data mata pelajaran dalam format JSON
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal mengambil data mata pelajaran' }); //mengirim respons 500 dengan pesan error
+  }
+};
+
+//membuat data mata pelajaran baru
+exports.createMapel = async (req, res) => { 
+  const { nama_mapel } = req.body; //mengambil data dari body permintaan
+
+  try {
+    const [result] = await pool.query( //menjalankan query untuk memasukkan data mata pelajaran baru
+      `INSERT INTO mata_pelajaran (nama_mapel)
+       VALUES (?)`,
+      [nama_mapel]
+    );
+    res.status(201).json({ //mengirim respons 201 dengan id mata pelajaran yang baru dibuat
+      message: 'Mata pelajaran berhasil ditambahkan',
+      id_mapel: result.insertId //id mata pelajaran yang baru dibuat
+    }); 
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal menambah mata pelajaran' }); //mengirim respons 500 dengan pesan error
+  }
+};
+
+//memperbarui data mata pelajaran berdasarkan id
+exports.updateMapel = async (req, res) => {
+  const { id } = req.params; //mengambil id dari parameter rute
+  const { nama_mapel } = req.body; //mengambil data dari body permintaan
+
+  try {
+    await pool.query( //menjalankan query untuk memperbarui data mata pelajaran
+      `UPDATE mata_pelajaran
+       SET nama_mapel=?
+       WHERE id_mapel=?`,
+      [nama_mapel, id]
+    );
+    res.json({ message: 'Mata pelajaran berhasil diperbarui' }); //mengirim respons sukses
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal update mata pelajaran' }); //mengirim respons 500 dengan pesan error
+  }
+};
+
+//menghapus data mata pelajaran berdasarkan id
+exports.deleteMapel = async (req, res) => {
+  const { id } = req.params; //mengambil id dari parameter rute
+  try {
+    await pool.query(`DELETE FROM mata_pelajaran WHERE id_mapel=?`, [id]); //menjalankan query untuk menghapus data mata pelajaran berdasarkan id
+    res.json({ message: 'Mata pelajaran berhasil dihapus' }); //mengirim respons sukses
+  } catch (err) { //menangani kesalahan
+    res.status(500).json({ message: 'Gagal menghapus mata pelajaran' }); //mengirim respons 500 dengan pesan error
+  }
+};
+// ------------------ AKHIR MAPEL ------------------

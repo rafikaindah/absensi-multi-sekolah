@@ -33,4 +33,10 @@ router.post('/siswa', masterController.createSiswa); //membuat data siswa baru
 router.put('/siswa/:id', masterController.updateSiswa); //memperbarui data siswa berdasarkan id
 router.delete('/siswa/:id', masterController.deleteSiswa); //menghapus data siswa berdasarkan id
 
+//mata pelajaran routes
+router.get('/mapel', masterController.getMapel); //mendapatkan semua data mata pelajaran
+router.post('/mapel', masterController.createMapel); //membuat data mata pelajaran baru
+router.put('/mapel/:id', masterController.updateMapel); //memperbarui data mata pelajaran berdasarkan id
+router.delete('/mapel/:id', masterController.deleteMapel); //menghapus data mata pelajaran berdasarkan id
+
 module.exports = router; //mengekspor router untuk digunakan di bagian lain aplikasi
