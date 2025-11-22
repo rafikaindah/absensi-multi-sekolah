@@ -26,4 +26,11 @@ router.post('/kelas', masterController.createKelas); //membuat data kelas baru
 router.put('/kelas/:id', masterController.updateKelas); //memperbarui data kelas berdasarkan id
 router.delete('/kelas/:id', masterController.deleteKelas); //menghapus data kelas berdasarkan id
 
+//siswa routes
+router.get('/siswa', masterController.getSiswa); //mendapatkan semua data siswa
+router.get('/siswa/kelas/:id_kelas', masterController.getSiswaByKelas); //  mendapatkan data siswa berdasarkan id kelas
+router.post('/siswa', masterController.createSiswa); //membuat data siswa baru
+router.put('/siswa/:id', masterController.updateSiswa); //memperbarui data siswa berdasarkan id
+router.delete('/siswa/:id', masterController.deleteSiswa); //menghapus data siswa berdasarkan id
+
 module.exports = router; //mengekspor router untuk digunakan di bagian lain aplikasi

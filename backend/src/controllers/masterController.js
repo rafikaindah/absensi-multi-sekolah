@@ -206,3 +206,85 @@ exports.deleteKelas = async (req, res) => { //menghapus data kelas berdasarkan i
 };
 
 // ------------------ AKHIR KELAS ------------------
+
+// ------------------ SISWA ------------------
+//mendapatkan semua data siswa
+exports.getSiswa = async (req, res) => { 
+  try { 
+    const [rows] = await pool.query( //menjalankan query untuk mendapatkan semua data siswa dengan informasi kelas dan sekolah
+      `SELECT s.*, k.nama_kelas, k.tingkat, sek.nama_sekolah                
+       FROM siswa s                                                         
+       JOIN kelas k ON s.id_kelas = k.id_kelas                              
+       JOIN sekolah sek ON k.id_sekolah = sek.id_sekolah                    
+       ORDER BY sek.nama_sekolah, k.tingkat, k.nama_kelas, s.nama_lengkap`  
+    ); //mengambil data siswa beserta nama kelas, tingkat, dan nama sekolah dengan pengurutan tertentu
+    res.json(rows); //mengirim respons dengan data siswa dalam format JSON
+  } catch (err) { //menangani kesalahan
+    res.status(500).json({ message: 'Gagal mengambil data siswa' }); //mengirim respons 500 dengan pesan error
+  }
+};
+
+//mendapatkan data siswa berdasarkan id kelas
+exports.getSiswaByKelas = async (req, res) => { 
+  const { id_kelas } = req.params; //mengambil id_kelas dari parameter rute
+  try {
+    const [rows] = await pool.query( //menjalankan query untuk mendapatkan data siswa berdasarkan id kelas
+      `SELECT * FROM siswa       
+       WHERE id_kelas = ?        
+       ORDER BY nama_lengkap`,   
+      [id_kelas]
+    ); 
+    res.json(rows); //mengirim respons dengan data siswa dalam format JSON
+  } catch (err) { //menangani kesalahan
+    res.status(500).json({ message: 'Gagal mengambil siswa per kelas' }); //mengirim respons 500 dengan pesan error
+  }
+};
+
+//membuat data siswa baru
+exports.createSiswa = async (req, res) => { 
+  const { id_kelas, nis, nama_lengkap } = req.body; //mengambil data dari body permintaan
+
+  try {
+    const [result] = await pool.query( //menjalankan query untuk memasukkan data siswa baru
+      `INSERT INTO siswa (id_kelas, nis, nama_lengkap)   
+       VALUES (?, ?, ?)`,                                //nilai yang akan dimasukkan
+      [id_kelas, nis, nama_lengkap]                      // nilai yang akan dimasukkan
+    );
+    res.status(201).json({ // mengirim respons 201 dengan id siswa yang baru dibuat
+      message: 'Siswa berhasil ditambahkan', //pesan sukses
+      id_siswa: result.insertId //id siswa yang baru dibuat
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal menambah siswa' }); //mengirim respons 500 dengan pesan error
+  }
+};
+
+//memperbarui data siswa berdasarkan id
+exports.updateSiswa = async (req, res) => {
+  const { id } = req.params; // mengambil id dari parameter rute
+  const { id_kelas, nis, nama_lengkap } = req.body; //mengambil data dari body permintaan
+
+  try {
+    await pool.query( //menjalankan query untuk memperbarui data siswa
+      `UPDATE siswa                            
+       SET id_kelas=?, nis=?, nama_lengkap=?   
+       WHERE id_siswa=?`,                      
+      [id_kelas, nis, nama_lengkap, id]
+    ); 
+    res.json({ message: 'Siswa berhasil diperbarui' });  //mengirim respons sukses
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal update siswa' }); //mengirim respons 500 dengan pesan error
+  }
+};
+
+//menghapus data siswa berdasarkan id
+exports.deleteSiswa = async (req, res) => { //menghapus data siswa berdasarkan id
+  const { id } = req.params; // mengambil id dari parameter rute
+  try {
+    await pool.query(`DELETE FROM siswa WHERE id_siswa=?`, [id]); //menjalankan query untuk menghapus data siswa berdasarkan id
+    res.json({ message: 'Siswa berhasil dihapus' }); //mengirim respons sukses
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal menghapus siswa' }); //mengirim respons 500 dengan pesan error
+  }
+};
+// ------------------ AKHIR SISWA ------------------
