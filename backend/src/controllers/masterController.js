@@ -351,3 +351,74 @@ exports.deleteMapel = async (req, res) => {
   }
 };
 // ------------------ AKHIR MAPEL ------------------
+
+// ------------------ PENDAFTARAN GURU ------------------
+//mendapatkan semua data pendaftaran guru
+exports.getPendaftaranGuru = async (req, res) => {
+  try {
+    const [rows] = await pool.query( //menjalankan query untuk mendapatkan semua data pendaftaran guru dengan informasi pengguna dan sekolah
+      `SELECT pg.*, p.nama_lengkap, p.email, s.nama_sekolah
+       FROM pendaftaran_guru pg
+       JOIN pengguna p ON pg.id_pengguna = p.id_pengguna
+       JOIN sekolah s ON pg.id_sekolah = s.id_sekolah
+       ORDER BY s.nama_sekolah, p.nama_lengkap`
+    );
+    res.json(rows); //mengirim respons dengan data pendaftaran guru dalam format JSON
+  } catch (err) { //menangani kesalahan
+    res.status(500).json({ message: 'Gagal mengambil data pendaftaran guru' }); //mengirim respons 500 dengan pesan error
+  }
+};
+
+//membuat data pendaftaran guru baru
+exports.createPendaftaranGuru = async (req, res) => { 
+  const { id_pengguna, id_sekolah } = req.body; //mengambil data dari body permintaan
+
+  try {
+    const [result] = await pool.query( //menjalankan query untuk memasukkan data pendaftaran guru baru
+      `INSERT INTO pendaftaran_guru (id_pengguna, id_sekolah)
+       VALUES (?, ?)`,
+      [id_pengguna, id_sekolah]
+    );
+    res.status(201).json({ //mengirim respons 201 dengan id pendaftaran guru yang baru dibuat
+      message: 'Pendaftaran guru berhasil ditambahkan',
+      id_pendaftaran: result.insertId
+    }); //id pendaftaran guru yang baru dibuat
+  } catch (err) {
+    // bisa terjadi error duplicate key (unique_pendaftaran) jika pengguna sudah mendaftar di sekolah yang sama
+    res.status(500).json({ message: 'Gagal menambah pendaftaran guru' });
+  }
+};
+
+//memperbarui data pendaftaran guru berdasarkan id
+exports.updatePendaftaranGuru = async (req, res) => {
+  const { id } = req.params; //mengambil id dari parameter rute
+  const { id_pengguna, id_sekolah } = req.body; //mengambil data dari body permintaan
+
+  try {
+    await pool.query( //menjalankan query untuk memperbarui data pendaftaran guru
+      `UPDATE pendaftaran_guru
+       SET id_pengguna=?, id_sekolah=?
+       WHERE id_pendaftaran=?`,
+      [id_pengguna, id_sekolah, id]
+    ); //nilai yang akan diperbarui
+    res.json({ message: 'Pendaftaran guru berhasil diperbarui' });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal update pendaftaran guru' }); 
+  }
+};
+
+//menghapus data pendaftaran guru berdasarkan id
+exports.deletePendaftaranGuru = async (req, res) => {
+  const { id } = req.params; //mengambil id dari parameter rute
+
+  try {
+    await pool.query( //menjalankan query untuk menghapus data pendaftaran guru berdasarkan id
+      `DELETE FROM pendaftaran_guru WHERE id_pendaftaran=?`,
+      [id]
+    ); //nilai yang akan dihapus berdasarkan id
+    res.json({ message: 'Pendaftaran guru berhasil dihapus' });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal menghapus pendaftaran guru' });
+  }
+};
+// ------------------ AKHIR PENDAFTARAN GURU ------------------
