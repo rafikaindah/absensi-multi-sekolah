@@ -45,4 +45,12 @@ router.post('/pendaftaran-guru', masterController.createPendaftaranGuru); //memb
 router.put('/pendaftaran-guru/:id', masterController.updatePendaftaranGuru); //memperbarui data pendaftaran guru berdasarkan id
 router.delete('/pendaftaran-guru/:id', masterController.deletePendaftaranGuru); //menghapus data pendaftaran guru berdasarkan id
 
+//jadwal mengajar routes
+router.get('/jadwal-mengajar', masterController.getJadwalMengajar); //mendapatkan semua data jadwal mengajar
+router.get('/jadwal-mengajar/kelas/:id_kelas', masterController.getJadwalMengajarByKelas); //mendapatkan data jadwal mengajar berdasarkan id kelas
+router.get('/jadwal-mengajar/pendaftaran/:id_pendaftaran', masterController.getJadwalMengajarByPendaftaran); //mendapatkan data jadwal mengajar berdasarkan id pendaftaran guru
+router.post('/jadwal-mengajar', masterController.createJadwalMengajar); //membuat data jadwal mengajar baru
+router.put('/jadwal-mengajar/:id', masterController.updateJadwalMengajar); //memperbarui data jadwal mengajar berdasarkan id
+router.delete('/jadwal-mengajar/:id', masterController.deleteJadwalMengajar); //menghapus data jadwal mengajar berdasarkan id
+
 module.exports = router; //mengekspor router untuk digunakan di bagian lain aplikasi

@@ -422,3 +422,132 @@ exports.deletePendaftaranGuru = async (req, res) => {
   }
 };
 // ------------------ AKHIR PENDAFTARAN GURU ------------------
+
+// ------------------ JADWAL MENGAJAR ------------------
+//mendapatkan semua data jadwal mengajar
+exports.getJadwalMengajar = async (req, res) => {
+  try {
+    const [rows] = await pool.query( //menjalankan query untuk mendapatkan semua data jadwal mengajar dengan informasi lengkap
+      `SELECT j.*,
+              k.nama_kelas, k.tingkat,
+              sek.nama_sekolah,
+              m.nama_mapel,
+              p.nama_lengkap AS nama_guru
+       FROM jadwal_mengajar j
+       JOIN pendaftaran_guru pg ON j.id_pendaftaran = pg.id_pendaftaran
+       JOIN pengguna p ON pg.id_pengguna = p.id_pengguna
+       JOIN sekolah sek ON pg.id_sekolah = sek.id_sekolah
+       JOIN kelas k ON j.id_kelas = k.id_kelas
+       JOIN mata_pelajaran m ON j.id_mapel = m.id_mapel
+       ORDER BY sek.nama_sekolah, k.tingkat, k.nama_kelas, j.hari, j.jam_mulai`
+    );
+    res.json(rows); //mengirim respons dengan data jadwal mengajar dalam format JSON
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal mengambil data jadwal mengajar' }); //mengirim respons 500 dengan pesan error
+  }
+};
+
+//mendapatkan data jadwal mengajar berdasarkan id kelas
+exports.getJadwalMengajarByKelas = async (req, res) => {
+  const { id_kelas } = req.params; //mengambil id_kelas dari parameter rute
+  try {
+    const [rows] = await pool.query( //menjalankan query untuk mendapatkan data jadwal mengajar berdasarkan id kelas
+      `SELECT j.*,
+              m.nama_mapel,
+              p.nama_lengkap AS nama_guru
+       FROM jadwal_mengajar j
+       JOIN pendaftaran_guru pg ON j.id_pendaftaran = pg.id_pendaftaran
+       JOIN pengguna p ON pg.id_pengguna = p.id_pengguna
+       JOIN mata_pelajaran m ON j.id_mapel = m.id_mapel
+       WHERE j.id_kelas = ?
+       ORDER BY j.hari, j.jam_mulai`,
+      [id_kelas] //nilai id_kelas yang akan digunakan dalam query
+    );
+    res.json(rows); //mengirim respons dengan data jadwal mengajar dalam format JSON
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal mengambil jadwal per kelas' }); //mengirim respons 500 dengan pesan error
+  }
+};
+
+//mendapatkan data jadwal mengajar berdasarkan id pendaftaran guru
+exports.getJadwalMengajarByPendaftaran = async (req, res) => {
+  const { id_pendaftaran } = req.params; //mengambil id_pendaftaran dari parameter rute
+
+  try {
+    const [rows] = await pool.query( //menjalankan query untuk mendapatkan data jadwal mengajar berdasarkan id pendaftaran guru
+      `SELECT j.*,
+              k.nama_kelas, k.tingkat,
+              m.nama_mapel,
+              p.nama_lengkap AS nama_guru,
+              s.nama_sekolah
+       FROM jadwal_mengajar j
+       JOIN pendaftaran_guru pg ON j.id_pendaftaran = pg.id_pendaftaran
+       JOIN pengguna p ON pg.id_pengguna = p.id_pengguna
+       JOIN sekolah s ON pg.id_sekolah = s.id_sekolah
+       JOIN kelas k ON j.id_kelas = k.id_kelas
+       JOIN mata_pelajaran m ON j.id_mapel = m.id_mapel
+       WHERE j.id_pendaftaran = ?
+       ORDER BY j.hari, j.jam_mulai`,
+      [id_pendaftaran] //nilai id_pendaftaran yang akan digunakan dalam query
+    );
+
+    res.json(rows); //mengirim respons dengan data jadwal mengajar dalam format JSON
+  } catch (err) {
+    console.error(err); //mencetak kesalahan ke konsol
+    res.status(500).json({ message: 'Gagal mengambil jadwal berdasarkan pendaftaran guru' }); //mengirim respons 500 dengan pesan error
+  }
+};
+
+//membuat data jadwal mengajar baru
+exports.createJadwalMengajar = async (req, res) => {
+  const { id_pendaftaran, id_kelas, id_mapel, hari, jam_mulai, jam_selesai } = req.body; //mengambil data dari body permintaan
+
+  try {
+    const [result] = await pool.query( //menjalankan query untuk memasukkan data jadwal mengajar baru
+      `INSERT INTO jadwal_mengajar
+       (id_pendaftaran, id_kelas, id_mapel, hari, jam_mulai, jam_selesai)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [id_pendaftaran, id_kelas, id_mapel, hari, jam_mulai, jam_selesai] //nilai yang akan dimasukkan
+    );
+    res.status(201).json({ //mengirim respons 201 dengan id jadwal mengajar yang baru dibuat
+      message: 'Jadwal mengajar berhasil ditambahkan',
+      id_jadwal: result.insertId
+    }); //id jadwal mengajar yang baru dibuat
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal menambah jadwal mengajar' }); //mengirim respons 500 dengan pesan error
+  }
+};
+
+//memperbarui data jadwal mengajar berdasarkan id
+exports.updateJadwalMengajar = async (req, res) => {
+  const { id } = req.params; //mengambil id dari parameter rute
+  const { id_pendaftaran, id_kelas, id_mapel, hari, jam_mulai, jam_selesai } = req.body; //mengambil data dari body permintaan
+
+  try {
+    await pool.query(
+      `UPDATE jadwal_mengajar
+       SET id_pendaftaran=?, id_kelas=?, id_mapel=?, hari=?, jam_mulai=?, jam_selesai=?
+       WHERE id_jadwal=?`,
+      [id_pendaftaran, id_kelas, id_mapel, hari, jam_mulai, jam_selesai, id] //nilai yang akan diperbarui
+    );
+    res.json({ message: 'Jadwal mengajar berhasil diperbarui' }); //mengirim respons sukses
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal update jadwal mengajar' }); //mengirim respons 500 dengan pesan error
+  }
+};
+
+//menghapus data jadwal mengajar berdasarkan id
+exports.deleteJadwalMengajar = async (req, res) => {
+  const { id } = req.params; //mengambil id dari parameter rute
+
+  try {
+    await pool.query( //menjalankan query untuk menghapus data jadwal mengajar berdasarkan id
+      `DELETE FROM jadwal_mengajar WHERE id_jadwal=?`,
+      [id]
+    );
+    res.json({ message: 'Jadwal mengajar berhasil dihapus' }); //mengirim respons sukses
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal menghapus jadwal mengajar' }); //mengirim respons 500 dengan pesan error
+  }
+};
+// ------------------ AKHIR JADWAL MENGAJAR ------------------
