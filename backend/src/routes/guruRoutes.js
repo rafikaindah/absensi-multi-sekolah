@@ -13,6 +13,9 @@ router.post('/checkout', guruController.checkout); //rute untuk checkout
 
 // jadwal mengajar routes
 router.get('/jadwal-hari-ini', guruController.getJadwalHariIni); // rute untuk mendapatkan jadwal hari ini
-router.get('/jadwal-semua', guruController.getSemuaJadwal); // rute untuk mendapatkan semua jadwal 
+router.get('/jadwal-semua', guruController.getSemuaJadwal); // rute untuk mendapatkan semua jadwal
+
+// absensi siswa (negatif) routes
+router.post('/absensi-siswa', guruController.absensiSiswa); // rute untuk menyimpan absensi siswa
 
 module.exports = router; //mengekspor router untuk digunakan di bagian lain aplikasi

@@ -171,3 +171,33 @@ exports.getSemuaJadwal = async (req, res) => {
   }
 };
 
+// fungsi untuk melakukan absensi siswa (negatif)
+exports.absensiSiswa = async (req, res) => { 
+  const { id_sesi_guru, id_jadwal, tanggal, ketidakhadiran } = req.body; //mengambil data absensi dari body permintaan
+
+  if (!Array.isArray(ketidakhadiran)) { //validasi format ketidakhadiran harus array
+    return res.status(400).json({ message: 'Format ketidakhadiran tidak valid' }); //mengirim respons error jika bukan array
+  }
+
+  const conn = await pool.getConnection(); //mendapatkan koneksi database untuk transaksi
+  try {
+    await conn.beginTransaction(); //memulai transaksi database
+
+    for (const item of ketidakhadiran) { //melakukan perulangan setiap data siswa
+      const { id_siswa, status } = item; //mengambil id siswa dan status absensi dari item
+      await conn.query( //menjalankan query untuk insert absensi siswa
+        `INSERT INTO absensi_siswa (id_sesi_guru, id_jadwal, id_siswa, status, tanggal)
+         VALUES (?, ?, ?, ?, ?)`,
+        [id_sesi_guru, id_jadwal, id_siswa, status, tanggal]
+      );
+    }
+
+    await conn.commit(); //commit transaksi jika semua query berhasil
+    res.status(201).json({ message: 'Absensi siswa disimpan' });
+  } catch (err) {//jika error
+    await conn.rollback(); //membatalkan transaksi
+    res.status(500).json({ message: 'Gagal menyimpan absensi siswa' });
+  } finally {
+    conn.release(); //melepas koneksi database
+  }
+};
