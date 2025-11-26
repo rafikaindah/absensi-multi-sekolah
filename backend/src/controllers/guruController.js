@@ -112,3 +112,62 @@ exports.checkout = async (req, res) => {
     res.status(500).json({ message: 'Gagal check-out' });
   }
 };
+
+// fungsi mendapatkan jadwal hari ini
+exports.getJadwalHariIni = async (req, res) => {
+  const { id_sekolah, hari } = req.query; // mengambil parameter id_sekolah dan hari 
+  const id_pengguna = req.user.id_pengguna; //mengambil id_pengguna dari token pengguna yang login
+
+  try {
+    const [rows] = await pool.query( //menjalankan query ke database 
+      `SELECT j.id_jadwal, j.jam_mulai, j.jam_selesai,
+              k.nama_kelas, m.nama_mapel
+       FROM jadwal_mengajar j
+       JOIN pendaftaran_guru pg ON j.id_pendaftaran = pg.id_pendaftaran
+       JOIN kelas k ON j.id_kelas = k.id_kelas
+       JOIN mata_pelajaran m ON j.id_mapel = m.id_mapel
+       WHERE pg.id_pengguna=? AND pg.id_sekolah=? AND j.hari=?`,
+      [id_pengguna, id_sekolah, hari]
+    );
+
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal mengambil jadwal hari ini' });
+  }
+};
+
+// fungsi untuk mendapatkan semua jadwal
+exports.getSemuaJadwal = async (req, res) => {
+  const id_pengguna = req.user.id_pengguna;  
+
+  try {
+    const [rows] = await pool.query(
+      `SELECT 
+          j.id_jadwal,
+          j.hari,
+          j.jam_mulai,
+          j.jam_selesai,
+          k.nama_kelas,
+          k.tingkat,
+          m.nama_mapel,
+          s.nama_sekolah
+       FROM jadwal_mengajar j
+       JOIN pendaftaran_guru pg ON j.id_pendaftaran = pg.id_pendaftaran
+       JOIN kelas k ON j.id_kelas = k.id_kelas
+       JOIN mata_pelajaran m ON j.id_mapel = m.id_mapel
+       JOIN sekolah s ON pg.id_sekolah = s.id_sekolah
+       WHERE pg.id_pengguna = ?
+       ORDER BY 
+          s.nama_sekolah,
+          FIELD(j.hari, 'Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'),
+          j.jam_mulai`,
+      [id_pengguna]
+    );
+
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Gagal mengambil semua jadwal mengajar' });
+  }
+};
+

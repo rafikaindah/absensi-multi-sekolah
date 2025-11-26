@@ -11,4 +11,8 @@ router.use(auth, roleCheck(['guru']));
 router.post('/checkin', guruController.checkin); //rute untuk checkin
 router.post('/checkout', guruController.checkout); //rute untuk checkout
 
+// jadwal mengajar routes
+router.get('/jadwal-hari-ini', guruController.getJadwalHariIni); // rute untuk mendapatkan jadwal hari ini
+router.get('/jadwal-semua', guruController.getSemuaJadwal); // rute untuk mendapatkan semua jadwal 
+
 module.exports = router; //mengekspor router untuk digunakan di bagian lain aplikasi
