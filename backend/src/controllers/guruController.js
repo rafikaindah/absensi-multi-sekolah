@@ -219,3 +219,21 @@ exports.jurnalMengajar = async (req, res) => {
     res.status(500).json({ message: 'Gagal menyimpan jurnal mengajar' });
   }
 };
+
+//fungsi untuk menyimpan catatan siswa
+exports.catatanSiswa = async (req, res) => {
+  const { id_sesi_guru, id_siswa, jenis_catatan, deskripsi } = req.body; //mengambil catatan dari body permintaan
+
+  try {
+    await pool.query( //menjalankan query untuk menyimpan catatan siswa
+      `INSERT INTO catatan_siswa 
+       (id_sesi_guru, id_siswa, jenis_catatan, deskripsi)
+       VALUES (?, ?, ?, ?)`, //query insert catatan siswa
+      [id_sesi_guru, id_siswa, jenis_catatan, deskripsi] //nilai-nilai yang disimpan
+    );
+
+    res.status(201).json({ message: 'Catatan siswa disimpan' });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal menyimpan catatan siswa' });
+  }
+};

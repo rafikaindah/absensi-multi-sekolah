@@ -21,4 +21,7 @@ router.post('/absensi-siswa', guruController.absensiSiswa); // rute untuk menyim
 //jurnal mengajar routes
 router.post('/jurnal', guruController.jurnalMengajar); //rute untuk menyimpan mengajar guru
 
+//catatan siswa routes
+router.post('/catatan-siswa', guruController.catatanSiswa); //rute untuk menyimpan catatan siswa
+
 module.exports = router; //mengekspor router untuk digunakan di bagian lain aplikasi
