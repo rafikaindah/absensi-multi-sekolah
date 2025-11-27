@@ -201,3 +201,21 @@ exports.absensiSiswa = async (req, res) => {
     conn.release(); //melepas koneksi database
   }
 };
+
+//fungsi untuk menyimpan jurnal mengajar guru
+exports.jurnalMengajar = async (req, res) => { 
+  const { id_sesi_guru, id_jadwal, materi_diajarkan, catatan_kegiatan } = req.body; //mengambil data dari body permintaan
+
+  try {
+    await pool.query( //menjalankan query untuk menyimpan jurnal
+      `INSERT INTO jurnal_mengajar 
+       (id_sesi_guru, id_jadwal, materi_diajarkan, catatan_kegiatan)
+       VALUES (?, ?, ?, ?)`, //query insert jurnal 
+      [id_sesi_guru, id_jadwal, materi_diajarkan, catatan_kegiatan] //nilai-nilai yang diinput
+    );
+
+    res.status(201).json({ message: 'Jurnal mengajar disimpan' }); 
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal menyimpan jurnal mengajar' });
+  }
+};

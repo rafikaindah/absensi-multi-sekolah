@@ -18,4 +18,7 @@ router.get('/jadwal-semua', guruController.getSemuaJadwal); // rute untuk mendap
 // absensi siswa (negatif) routes
 router.post('/absensi-siswa', guruController.absensiSiswa); // rute untuk menyimpan absensi siswa
 
+//jurnal mengajar routes
+router.post('/jurnal', guruController.jurnalMengajar); //rute untuk menyimpan mengajar guru
+
 module.exports = router; //mengekspor router untuk digunakan di bagian lain aplikasi
