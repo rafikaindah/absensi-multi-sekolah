@@ -16,6 +16,11 @@ app.get('/', (req, res) => {
   res.json({ message: 'API Absensi Multi Sekolah' }); 
 });
 
+app.get('/api/test', (req, res) => { //endpoint untuk mengetes koneksi API
+  res.json({ message: "API test berhasil" });
+});
+
+
 // daftar route
 app.use('/api/auth', authRoutes); //menggunakan route otentikasi
 app.use('/api/master', masterRoutes);
