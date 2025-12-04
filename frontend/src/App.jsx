@@ -3,32 +3,36 @@ import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import TestAuth from "./TestAuth";
 
-// halaman dummy admin & guru
-function AdminPage() {
-  return <h2>Halaman Admin</h2>;
-}
+import AdminLayout from "./pages/admin/AdminLayout";
+import PenggunaPage from "./pages/admin/master/PenggunaPage";
 
+// halaman dummy guru
 function GuruPage() {
   return <h2>Halaman Guru</h2>;
 }
 
-function App() { 
+function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" />} /> 
-
+      <Route path="/" element={<Navigate to="/login" />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/test-auth" element={<TestAuth />} />
 
+      {/* ADMIN */}
       <Route
         path="/admin"
         element={
           <ProtectedRoute roles={["admin"]}>
-            <AdminPage />
+            <AdminLayout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route index element={<Navigate to="/admin/master/pengguna" />} />
+        <Route path="master/pengguna" element={<PenggunaPage />} />
+      </Route>
 
-      <Route 
+      {/* GURU */}
+      <Route
         path="/guru"
         element={
           <ProtectedRoute roles={["guru"]}>
@@ -37,7 +41,7 @@ function App() {
         }
       />
 
-      <Route path="/test-auth" element={<TestAuth />} />
+      <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
   );
 }
