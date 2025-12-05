@@ -5,6 +5,7 @@ import TestAuth from "./TestAuth";
 
 import AdminLayout from "./pages/admin/AdminLayout";
 import PenggunaPage from "./pages/admin/master/PenggunaPage";
+import SekolahPage from "./pages/admin/master/SekolahPage";
 
 // halaman dummy guru
 function GuruPage() {
@@ -29,6 +30,7 @@ function App() {
       >
         <Route index element={<Navigate to="/admin/master/pengguna" />} />
         <Route path="master/pengguna" element={<PenggunaPage />} />
+        <Route path="master/sekolah" element={<SekolahPage />} />
       </Route>
 
       {/* GURU */}

@@ -59,7 +59,14 @@ export default function AdminLayout() {
             >
               Pengguna
             </NavLink>
-
+            
+            {/* link menuju halaman Master -> Sekolah */}
+            <NavLink
+              to="/admin/master/sekolah"
+              className={({ isActive }) => `nav-item sub ${isActive ? "active" : ""}`}
+    >
+              Sekolah
+              </NavLink>
           </div>
         )}
 
