@@ -6,7 +6,7 @@
   color: #1f2937;
 }
 
-/* baris judul halaman (Master Data Pengguna) + search + tombol */
+/* baris judul halaman (Master Data ....) + search + tombol */
 .page-header {
   display: flex;
   justify-content: space-between;
@@ -41,7 +41,7 @@
   background: #fff;
 }
 
-/* tombol tambah pengguna */
+/* tombol tambah ... */
 .primary {
   height: 42px;       
   padding: 0 16px;     
@@ -65,13 +65,13 @@
   overflow: hidden;
 }
 
-/* tabel utama */
+/* tabel utama list data */
 .table {
   width: 100%;
   border-collapse: collapse;
 }
 
-/* header tabel (Nama Lengkap / Email / Role / Aksi) */
+/* header kolom tabel */
 .table thead th {
   text-align: left;
   font-size: 13px;
@@ -82,7 +82,7 @@
   border-bottom: 1px solid #e7efe9;
 }
 
-/* isi tabel */
+/* isi tabel per baris */
 .table tbody td {
   padding: 14px;
   border-bottom: 1px solid #eef3f0;
@@ -90,7 +90,7 @@
   color: #1f2937;
 }
 
-/* kolom aksi (Edit + Hapus) */
+/* kolom aksi (edit + hapus) */
 .row-actions {
   display: flex;
   gap: 10px;
@@ -136,8 +136,8 @@
   color: #b42323;
 }
 
-/* modal tambah/edit pengguna */
-/* Background overlay modal */
+/* modal tambah/edit */
+/* background overlay gelap untuk modal */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -148,7 +148,7 @@
   z-index: 999;
 }
 
-/* box utama modal */
+/* kontainer box modal */
 .modal {
   width: min(820px, 100%);
   background: #fff;
@@ -168,7 +168,7 @@
   gap: 12px;
 }
 
-/* judul modal (Tambah / Edit Pengguna) */
+/* judul modal (Tambah / Edit ...) */
 .modal-head h2 {
   margin: 0;
   font-size: 20px;
@@ -236,7 +236,7 @@
   color: #98a29b;
 }
 
-/* tombol Simpan dan batal */
+/* baris tombol bawah modal: batal + simpan */
 .modal-actions {
   margin-top: 18px;
   display: flex;
@@ -244,7 +244,7 @@
   gap: 12px;
 }
 
-
+/* tombol batal di modal */
 .modal-actions .btn {
   height: 42px;
   padding: 0 16px;
@@ -256,7 +256,7 @@
   font-size: 14px;
 }
 
-
+/* tombol simpan di modal */
 .modal-actions .primary {
   height: 42px;
   padding: 0 18px;

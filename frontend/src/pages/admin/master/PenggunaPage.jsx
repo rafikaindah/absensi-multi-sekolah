@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react"; // import React hook
 import { masterApi } from "../../../api/masterApi"; // import API master untuk CRUD pengguna
-import "./PenggunaPage.css"; // import file CSS PenggunaPage
+import "./Master.css"; // import file CSS
 
 // template kosong untuk form tambah/edit pengguna
 const emptyForm = {

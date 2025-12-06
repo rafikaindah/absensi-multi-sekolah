@@ -12,4 +12,10 @@ export const masterApi = {
   createSekolah: (payload) => api.post("/master/sekolah", payload),
   updateSekolah: (id, payload) => api.put(`/master/sekolah/${id}`, payload),
   deleteSekolah: (id) => api.delete(`/master/sekolah/${id}`),
+
+  //KELAS
+  getKelas: () => api.get("/master/kelas"),
+  createKelas: (payload) => api.post("/master/kelas", payload),
+  updateKelas: (id, payload) => api.put(`/master/kelas/${id}`, payload),
+  deleteKelas: (id) => api.delete(`/master/kelas/${id}`),
 };

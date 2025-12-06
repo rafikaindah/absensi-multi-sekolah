@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { masterApi } from "../../../api/masterApi"; 
-import "./SekolahPage.css";
+import "./Master.css";
 
 // template kosong untuk form tambah/edit sekolah
 const emptyForm = {
