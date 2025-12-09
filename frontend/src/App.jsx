@@ -4,7 +4,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import TestAuth from "./TestAuth";
 
 import AdminLayout from "./pages/admin/AdminLayout";
-import PenggunaPage from "./pages/admin/master/PenggunaPage";
+import PenggunaPage from "./pages/admin/master/pengguna/PenggunaPage";
 import SekolahPage from "./pages/admin/master/SekolahPage";
 import KelasPage from "./pages/admin/master/KelasPage";
 
