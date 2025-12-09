@@ -15,6 +15,7 @@ export const masterApi = {
 
   //KELAS
   getKelas: () => api.get("/master/kelas"),
+  getKelasBySekolah: (id) => api.get(`/master/kelas/sekolah/${id}`),
   createKelas: (payload) => api.post("/master/kelas", payload),
   updateKelas: (id, payload) => api.put(`/master/kelas/${id}`, payload),
   deleteKelas: (id) => api.delete(`/master/kelas/${id}`),

@@ -6,7 +6,7 @@ import TestAuth from "./TestAuth";
 import AdminLayout from "./pages/admin/AdminLayout";
 import PenggunaPage from "./pages/admin/master/pengguna/PenggunaPage";
 import SekolahPage from "./pages/admin/master/sekolah/SekolahPage";
-import KelasPage from "./pages/admin/master/KelasPage";
+import KelasPage from "./pages/admin/master/kelas/KelasPage";
 
 // halaman dummy guru
 function GuruPage() {
