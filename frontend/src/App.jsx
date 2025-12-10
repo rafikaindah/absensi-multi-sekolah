@@ -7,6 +7,7 @@ import AdminLayout from "./pages/admin/AdminLayout";
 import PenggunaPage from "./pages/admin/master/pengguna/PenggunaPage";
 import SekolahPage from "./pages/admin/master/sekolah/SekolahPage";
 import KelasPage from "./pages/admin/master/kelas/KelasPage";
+import SiswaPage from "./pages/admin/master/siswa/SiswaPage";
 
 // halaman dummy guru
 function GuruPage() {
@@ -33,6 +34,7 @@ function App() {
         <Route path="master/pengguna" element={<PenggunaPage />} />
         <Route path="master/sekolah" element={<SekolahPage />} />
         <Route path="master/kelas" element={<KelasPage />} />
+        <Route path="master/siswa" element={<SiswaPage />}/>
       </Route>
 
       {/* GURU */}

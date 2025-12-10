@@ -269,6 +269,25 @@
   font-size: 14px;
 }
 
+/* dropdown select */
+.select {
+  height: 42px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid #d7e2db;
+  outline: none;
+  background: #fff;
+  font-weight: 800;
+}
+
+/* hint teks dibawah input */
+.hint {
+  margin: 6px 0 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: rgba(31, 45, 37, 0.7);
+}
+
 @media (max-width: 700px) {
   .grid {
     grid-template-columns: 1fr;
