@@ -258,7 +258,7 @@
 /* input dan dropdown */
 .field input,
 .field select {
-  width: 100%;
+  width: 90%;
   height: 46px;          
   padding: 0 14px;        
   border-radius: 12px;    

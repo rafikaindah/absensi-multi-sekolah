@@ -29,10 +29,7 @@ export const masterApi = {
 
   //MATA PELAJARAN
   getMapel: () => api.get("/master/mapel"),
-  createMapel: (payload) => api.post("/master/mapel",payload),
+  createMapel: (payload) => api.post("/master/mapel", payload),
   updateMapel: (id, payload) => api.put(`/master/mapel/${id}`, payload),
-  deleteMapel: (id) => api.delete(`/master/mapel/${id}`, payload)
-
-  //JADWAL MENGAJAR
-  
+  deleteMapel: (id) => api.delete(`/master/mapel/${id}`),
 };

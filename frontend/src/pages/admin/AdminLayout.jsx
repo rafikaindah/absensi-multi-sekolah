@@ -106,6 +106,14 @@ export default function AdminLayout() {
 >
             Siswa
             </NavLink>
+
+            {/* link menuju halaman Master -> Mata Pelajaran */}
+            <NavLink
+            to="/admin/master/mapel"
+            className={({ isActive }) => `nav-item sub ${isActive ? "active" : ""}`}
+>
+            Mata Pelajaran
+            </NavLink>
           </div>
         )}
 
