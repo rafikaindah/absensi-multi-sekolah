@@ -38,6 +38,7 @@ export default function PenggunaPage() {
         ) : c.filtered.length === 0 ? (
           <div className="state">Data kosong.</div>
         ) : (
+          <div className="table-wrapper">
           <table className="table">
             <thead>
               <tr>
@@ -71,6 +72,7 @@ export default function PenggunaPage() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
 

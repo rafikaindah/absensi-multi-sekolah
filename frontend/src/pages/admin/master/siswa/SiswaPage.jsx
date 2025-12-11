@@ -59,6 +59,7 @@ export default function SiswaPage() {
         ) : c.rows.length === 0 ? (
           <div className="state">Data kosong.</div>
         ) : (
+          <div className="table-wrapper">
           <table className="table">
             <thead>
               <tr>
@@ -90,6 +91,7 @@ export default function SiswaPage() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
 

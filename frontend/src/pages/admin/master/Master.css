@@ -12,6 +12,7 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 /* Judul besar halaman */
@@ -28,11 +29,15 @@
   display: flex;
   align-items: center; 
   gap: 10px;
+  flex-wrap: wrap;
+  width: 100%; 
+  justify-content: flex-end;
 }
 
 /* input pencarian */
 .search {
-  width: 320px;
+  width: 100%;
+  max-width: 320px;
   height: 42px;        
   padding: 0 12px;
   border-radius: 10px;
@@ -65,6 +70,11 @@
   overflow: hidden;
 }
 
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
 /* tabel utama list data */
 .table {
   width: 100%;
@@ -94,6 +104,7 @@
 .row-actions {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 /* tombol kecil edit/hapus */
@@ -144,7 +155,7 @@
   background: rgba(0,0,0,0.35);
   display: grid;
   place-items: center;
-  padding: 18px;
+  padding: 14px;
   z-index: 999;
 }
 
@@ -163,7 +174,7 @@
   background: #f6faf7;
   border-bottom: 1px solid #e7efe9;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
@@ -205,7 +216,7 @@
 /* layout 2 kolom */
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 16px 18px; 
 }
 
@@ -221,7 +232,7 @@
 /* input dan dropdown */
 .field input,
 .field select {
-  width: 80%;
+  width: 100%;
   height: 46px;          
   padding: 0 14px;        
   border-radius: 12px;    
@@ -242,6 +253,8 @@
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+  flex-wrap: wrap;
+  
 }
 
 /* tombol batal di modal */
@@ -286,13 +299,4 @@
   font-size: 13px;
   font-weight: 800;
   color: rgba(31, 45, 37, 0.7);
-}
-
-@media (max-width: 700px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-  .modal-head {
-    align-items: center;
-  }
 }
