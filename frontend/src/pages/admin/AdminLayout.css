@@ -1,19 +1,22 @@
 /* halaman utama halaman admin */
 .admin-shell {
-  height: 100vh;            
-  display: flex;            
+  min-height: 100vh;            
+  display: flex;
+  flex-wrap: wrap;            
   background: #f3f6f4;     
 }
 
 /* sidebar kiri admin */
-.admin-sidebar {
-  width: 260px;             
+.admin-sidebar {             
   background: #0f2a16;      
   color: #eaf3ec;           
   padding: 16px;            
   display: flex;
   flex-direction: column;  
-  gap: 14px;                
+  gap: 14px;
+  flex: 1 1 260px; 
+  max-width: 260px;
+  min-width: 220px;                
 }
 
 /* box area judul dan subjudul */
@@ -90,7 +93,8 @@
 
 /* halaman kanan admin */
 .admin-content {
-  flex: 1;                  
+  flex: 1 1 480px;                  
   padding: 18px;            
-  overflow: auto;           
+  overflow: auto;
+  min-width: 320px;           
 }
