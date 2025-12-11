@@ -1,23 +1,32 @@
-import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom"; // import komponen navigasi dari React Router
-import { useEffect, useState } from "react"; // import React hook untuk state dan efek
-import "./AdminLayout.css"; // import file CSS layout admin
+import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom"; 
+import { useEffect, useState, useCallback } from "react"; 
+import "./AdminLayout.css"; 
 
 export default function AdminLayout() {
-  const navigate = useNavigate(); // hook untuk perpindahan halaman (redirect)
+  
+  //navigasi dan cek URL
+  const navigate = useNavigate(); 
+  const location = useLocation(); 
 
-  const location = useLocation(); // hook untuk mendapatkan info lokasi (path URL) saat ini
+  //state buka/tutup master data
+  const [openMaster, setOpenMaster] = useState(false); 
 
-  const [openMaster, setOpenMaster] = useState(false); // state untuk mengatur dropdown Master Data (buka/tutup)
+  //state buka/tutup sidebar
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  // useEffect: otomatis buka dropdown saat berada di route /admin/master/...
+  const openSidebar = useCallback(() => setSidebarOpen(true), []);
+  const closeSidebar = useCallback(() => setSidebarOpen(false), []);
+  const toggleSidebar = useCallback(() => setSidebarOpen((prev) => !prev), []);
+
+
   useEffect(() => {
-    // Jika path URL diawali "/admin/master", maka buka dropdown
+    
     if (location.pathname.startsWith("/admin/master")) {
       setOpenMaster(true);
     }
-  }, [location.pathname]); // dijalankan setiap path berubah
+  }, [location.pathname]); 
 
-  // fungsi logout: menghapus token + user lalu redirect ke login
+  
   const handleLogout = () => {
     localStorage.removeItem("token"); 
     localStorage.removeItem("user");  
@@ -27,9 +36,23 @@ export default function AdminLayout() {
   return (
     // wrapper layout seluruh halaman admin (sidebar + konten)
     <div className="admin-shell">
+      {/* overlay untuk mobile */}
+      <div
+        className={`sidebar-overlay ${sidebarOpen ? "is-open" : ""}`}
+        onClick={closeSidebar}
+      />
 
       {/* sidebar sebelah kiri */}
-      <aside className="admin-sidebar">
+      <aside className={`admin-sidebar ${sidebarOpen ? "is-open" : ""}`}>
+        {/* tombol X di dalam sidebar (mobile) */}
+        <button
+          type="button"
+          className="sidebar-close"
+          onClick={closeSidebar}
+          aria-label="Tutup menu"
+        >
+          ✕
+        </button>
 
         {/* bagian judul sidebar (Admin Panel + Sistem Absensi) */}
         <div className="brand">
@@ -95,7 +118,7 @@ export default function AdminLayout() {
 
       {/* area konten utama di kanan */}
       <main className="admin-content">
-        <Outlet /> 
+        <Outlet context={{ openSidebar, closeSidebar, toggleSidebar }} /> 
       </main>
     </div>
   );

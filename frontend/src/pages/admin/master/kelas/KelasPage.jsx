@@ -1,15 +1,27 @@
 import "../Master.css";
 import { useKelasController } from "./kelas.controller";
+import { useOutletContext } from "react-router-dom";
 
 export default function KelasPage() {
   const c = useKelasController();
+  const { toggleSidebar } = useOutletContext();
 
   return (
     <div className="page">
       {/* header judul + search + tombol tambah */}
       <div className="page-header">
         <div>
+          <div className="title-row">
+            {/* tombol hamburger */}
+            <button
+              className="hamburger"
+              onClick={toggleSidebar}
+              aria-label="Buka / tutup menu"
+            >
+              ☰
+            </button>
           <h1>Master Data Kelas</h1>
+        </div>
         </div>
 
         <div className="actions">

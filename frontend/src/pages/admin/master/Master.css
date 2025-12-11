@@ -15,6 +15,32 @@
   flex-wrap: wrap;
 }
 
+/* baris judul + tombol hamburger */
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* tombol hamburger */
+.hamburger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 10px;
+  border: 1px solid #d7e2db;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 1;
+}
+
+
 /* Judul besar halaman */
 .page-header h1 {
   margin: 0;
@@ -300,3 +326,19 @@
   font-weight: 800;
   color: rgba(31, 45, 37, 0.7);
 }
+
+/* tampilan mobile */
+@media (max-width: 768px) {
+  .page-header h1 {
+    font-size: 22px;
+  }
+
+  .actions {
+    justify-content: flex-start;
+  }
+
+  .table {
+    min-width: 300px; 
+  }
+}
+

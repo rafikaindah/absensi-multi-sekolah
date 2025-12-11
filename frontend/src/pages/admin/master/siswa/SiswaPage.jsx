@@ -1,8 +1,10 @@
 import "../Master.css";
 import { useSiswaController } from "./siswa.controller";
+import { useOutletContext } from "react-router-dom";
 
 export default function SiswaPage() {
   const c = useSiswaController();
+  const { toggleSidebar } = useOutletContext();
 
   return (
     // halaman master data siswa
@@ -10,7 +12,17 @@ export default function SiswaPage() {
       {/* header judul + filter sekolah/kelas + tombol tambah */}
       <div className="page-header">
         <div>
+          <div className="title-row">
+            {/* tombol hamburger */}
+            <button
+              className="hamburger"
+              onClick={toggleSidebar}
+              aria-label="Buka / tutup menu"
+            >
+              ☰
+            </button>
           <h1>Master Data Siswa</h1>
+        </div>
         </div>
 
         <div className="actions">

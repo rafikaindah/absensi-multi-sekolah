@@ -26,4 +26,13 @@ export const masterApi = {
   createSiswa: (payload) => api.post("/master/siswa", payload),
   updateSiswa: (id, payload) => api.put(`/master/siswa/${id}`, payload),
   deleteSiswa: (id) => api.delete(`/master/siswa/${id}`),
+
+  //MATA PELAJARAN
+  getMapel: () => api.get("/master/mapel"),
+  createMapel: (payload) => api.post("/master/mapel",payload),
+  updateMapel: (id, payload) => api.put(`/master/mapel/${id}`, payload),
+  deleteMapel: (id) => api.delete(`/master/mapel/${id}`, payload)
+
+  //JADWAL MENGAJAR
+  
 };
