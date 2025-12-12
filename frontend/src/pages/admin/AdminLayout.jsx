@@ -114,6 +114,14 @@ export default function AdminLayout() {
 >
             Mata Pelajaran
             </NavLink>
+
+            {/* link menuju halaman Master -> Pendaftaran Guru */}
+            <NavLink
+            to="/admin/master/pendaftaran-guru"
+            className={({ isActive }) => `nav-item sub ${isActive ? "active" : ""}`}
+>
+            Pendaftaran Guru
+            </NavLink>
           </div>
         )}
 

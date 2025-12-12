@@ -9,6 +9,7 @@ import SekolahPage from "./pages/admin/master/sekolah/SekolahPage";
 import KelasPage from "./pages/admin/master/kelas/KelasPage";
 import SiswaPage from "./pages/admin/master/siswa/SiswaPage";
 import MapelPage from "./pages/admin/master/mapel/MapelPage";
+import PendaftaranGuruPage from "./pages/admin/master/pendaftaran-guru/PendaftaranGuruPage";
 
 // halaman dummy guru
 function GuruPage() {
@@ -37,6 +38,7 @@ function App() {
         <Route path="master/kelas" element={<KelasPage />} />
         <Route path="master/siswa" element={<SiswaPage />}/>
         <Route path="master/mapel" element={<MapelPage />} />
+        <Route path="master/pendaftaran-guru" element={<PendaftaranGuruPage />} />
       </Route>
 
       {/* GURU */}

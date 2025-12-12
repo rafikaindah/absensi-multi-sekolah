@@ -32,4 +32,10 @@ export const masterApi = {
   createMapel: (payload) => api.post("/master/mapel", payload),
   updateMapel: (id, payload) => api.put(`/master/mapel/${id}`, payload),
   deleteMapel: (id) => api.delete(`/master/mapel/${id}`),
+
+  // PENDAFTARAN GURU
+  getPendaftaranGuru: () => api.get("/master/pendaftaran-guru"),
+  createPendaftaranGuru: (payload) => api.post("/master/pendaftaran-guru", payload),
+  updatePendaftaranGuru: (id, payload) => api.put(`/master/pendaftaran-guru/${id}`, payload),
+  deletePendaftaranGuru: (id) => api.delete(`/master/pendaftaran-guru/${id}`),
 };
