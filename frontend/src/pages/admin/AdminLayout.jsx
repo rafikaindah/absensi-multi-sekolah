@@ -122,6 +122,14 @@ export default function AdminLayout() {
 >
             Pendaftaran Guru
             </NavLink>
+
+            {/* link menuju halaman Master -> Jadwal Mengajar */}
+            <NavLink
+            to="/admin/master/jadwal-mengajar"
+            className={({ isActive }) => `nav-item sub ${isActive ? "active" : ""}`}
+>
+            Jadwal Mengajar
+            </NavLink>
           </div>
         )}
 

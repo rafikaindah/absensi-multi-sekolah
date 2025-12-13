@@ -38,4 +38,12 @@ export const masterApi = {
   createPendaftaranGuru: (payload) => api.post("/master/pendaftaran-guru", payload),
   updatePendaftaranGuru: (id, payload) => api.put(`/master/pendaftaran-guru/${id}`, payload),
   deletePendaftaranGuru: (id) => api.delete(`/master/pendaftaran-guru/${id}`),
+
+  // JADWAL MENGAJAR
+  getJadwalMengajar: () => api.get("/master/jadwal-mengajar"),
+  getJadwalMengajarByKelas: (id_kelas) => api.get(`/master/jadwal-mengajar/kelas/${id_kelas}`),
+  getJadwalMengajarByPendaftaran: (id_pendaftaran) => api.get(`/master/jadwal-mengajar/pendaftaran/${id_pendaftaran}`),
+  createJadwalMengajar: (payload) => api.post("/master/jadwal-mengajar", payload),
+  updateJadwalMengajar: (id, payload) => api.put(`/master/jadwal-mengajar/${id}`, payload),
+  deleteJadwalMengajar: (id) => api.delete(`/master/jadwal-mengajar/${id}`),
 };

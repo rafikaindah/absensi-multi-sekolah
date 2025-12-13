@@ -502,19 +502,58 @@ exports.getJadwalMengajarByPendaftaran = async (req, res) => {
 exports.createJadwalMengajar = async (req, res) => {
   const { id_pendaftaran, id_kelas, id_mapel, hari, jam_mulai, jam_selesai } = req.body; //mengambil data dari body permintaan
 
+  if (!id_pendaftaran || !id_kelas || !id_mapel || !hari || !jam_mulai || !jam_selesai) { 
+    return res.status(400).json({ message: "Semua field jadwal wajib diisi" }); 
+  }
+
+  if (String(jam_mulai) >= String(jam_selesai)) { // (DITAMBAH) validasi logika: jam mulai harus sebelum jam selesai
+    return res.status(400).json({ message: "Jam mulai harus lebih kecil dari jam selesai" }); // (DITAMBAH) jika tidak valid, kembalikan 400
+  }
+
   try {
-    const [result] = await pool.query( //menjalankan query untuk memasukkan data jadwal mengajar baru
+    // bentrok kelas (kelas sama, hari sama, jam overlap)/bentrok jadwal untuk kelas
+    const [conflictKelas] = await pool.query( 
+      `SELECT 1
+       FROM jadwal_mengajar
+       WHERE id_kelas=? AND hari=?
+         AND (jam_mulai < ? AND jam_selesai > ?)
+       LIMIT 1`,
+      [id_kelas, hari, jam_selesai, jam_mulai] 
+    );
+    if (conflictKelas.length) { 
+      return res.status(409).json({ message: "Jadwal bentrok: kelas sudah ada jadwal di jam tersebut" }); 
+    }
+
+    // bentrok guru (pendaftaran sama, hari sama, jam overlap)/bentrok jadwal guru
+    const [conflictGuru] = await pool.query( 
+      `SELECT 1
+       FROM jadwal_mengajar
+       WHERE id_pendaftaran=? AND hari=?
+         AND (jam_mulai < ? AND jam_selesai > ?)
+       LIMIT 1`,
+      [id_pendaftaran, hari, jam_selesai, jam_mulai] 
+    );
+    if (conflictGuru.length) { 
+      return res.status(409).json({ message: "Jadwal bentrok: guru sudah mengajar di jam tersebut" }); // (DITAMBAH) 409 conflict
+    }
+
+    const [result] = await pool.query( 
       `INSERT INTO jadwal_mengajar
        (id_pendaftaran, id_kelas, id_mapel, hari, jam_mulai, jam_selesai)
        VALUES (?, ?, ?, ?, ?, ?)`,
-      [id_pendaftaran, id_kelas, id_mapel, hari, jam_mulai, jam_selesai] //nilai yang akan dimasukkan
+      [id_pendaftaran, id_kelas, id_mapel, hari, jam_mulai, jam_selesai] 
     );
-    res.status(201).json({ //mengirim respons 201 dengan id jadwal mengajar yang baru dibuat
+    res.status(201).json({ 
       message: 'Jadwal mengajar berhasil ditambahkan',
       id_jadwal: result.insertId
-    }); //id jadwal mengajar yang baru dibuat
+    }); 
   } catch (err) {
-    res.status(500).json({ message: 'Gagal menambah jadwal mengajar' }); //mengirim respons 500 dengan pesan error
+    
+    if (err?.code === "ER_DUP_ENTRY") { 
+      return res.status(409).json({ message: "Jadwal yang sama sudah ada" }); 
+    }
+    console.error("createJadwalMengajar error:", err); 
+    return res.status(500).json({ message: "Gagal menambah jadwal mengajar" }); 
   }
 };
 
@@ -523,16 +562,56 @@ exports.updateJadwalMengajar = async (req, res) => {
   const { id } = req.params; //mengambil id dari parameter rute
   const { id_pendaftaran, id_kelas, id_mapel, hari, jam_mulai, jam_selesai } = req.body; //mengambil data dari body permintaan
 
+  if (!id_pendaftaran || !id_kelas || !id_mapel || !hari || !jam_mulai || !jam_selesai) { 
+    return res.status(400).json({ message: "Semua field jadwal wajib diisi" }); 
+  }
+
+  if (String(jam_mulai) >= String(jam_selesai)) { 
+    return res.status(400).json({ message: "Jam mulai harus lebih kecil dari jam selesai" }); 
+  }
+
   try {
+    // bentrok kelas (kelas sama, hari sama, jam overlap)/bentrok jadwal untuk kelas
+    const [conflictKelas] = await pool.query( 
+      `SELECT 1
+       FROM jadwal_mengajar
+       WHERE id_kelas=? AND hari=?
+         AND (jam_mulai < ? AND jam_selesai > ?)
+         AND id_jadwal <> ?
+       LIMIT 1`,
+      [id_kelas, hari, jam_selesai, jam_mulai, id] 
+    );
+    if (conflictKelas.length) { 
+      return res.status(409).json({ message: "Jadwal bentrok: kelas sudah ada jadwal di jam tersebut" }); 
+    }
+
+    // bentrok guru (pendaftaran sama, hari sama, jam overlap)/bentrok jadwal guru
+    const [conflictGuru] = await pool.query( 
+      `SELECT 1
+       FROM jadwal_mengajar
+       WHERE id_pendaftaran=? AND hari=?
+         AND (jam_mulai < ? AND jam_selesai > ?)
+         AND id_jadwal <> ?
+       LIMIT 1`,
+      [id_pendaftaran, hari, jam_selesai, jam_mulai, id] 
+    );
+    if (conflictGuru.length) { 
+      return res.status(409).json({ message: "Jadwal bentrok: guru sudah mengajar di jam tersebut" }); 
+    }
+
     await pool.query(
       `UPDATE jadwal_mengajar
        SET id_pendaftaran=?, id_kelas=?, id_mapel=?, hari=?, jam_mulai=?, jam_selesai=?
        WHERE id_jadwal=?`,
-      [id_pendaftaran, id_kelas, id_mapel, hari, jam_mulai, jam_selesai, id] //nilai yang akan diperbarui
+      [id_pendaftaran, id_kelas, id_mapel, hari, jam_mulai, jam_selesai, id] 
     );
-    res.json({ message: 'Jadwal mengajar berhasil diperbarui' }); //mengirim respons sukses
+    res.json({ message: 'Jadwal mengajar berhasil diperbarui' }); 
   } catch (err) {
-    res.status(500).json({ message: 'Gagal update jadwal mengajar' }); //mengirim respons 500 dengan pesan error
+    if (err?.code === "ER_DUP_ENTRY") { 
+      return res.status(409).json({ message: "Jadwal yang sama sudah ada" }); 
+    }
+    console.error("updateJadwalMengajar error:", err); 
+    return res.status(500).json({ message: "Gagal update jadwal mengajar" }); 
   }
 };
 

@@ -327,6 +327,21 @@
   color: rgba(31, 45, 37, 0.7);
 }
 
+/*grup (judul+isi) */
+.group-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/*style teks judul grup (nama sekolahnya)*/
+.group-title {
+  margin: 6px 0 0;
+  font-size: 18px;
+  font-weight: 900;
+  color: #1f2d25;
+}
+
 /* tampilan mobile */
 @media (max-width: 768px) {
   .page-header h1 {
