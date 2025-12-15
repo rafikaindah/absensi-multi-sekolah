@@ -12,10 +12,13 @@ import MapelPage from "./pages/admin/master/mapel/MapelPage";
 import PendaftaranGuruPage from "./pages/admin/master/pendaftaran-guru/PendaftaranGuruPage";
 import JadwalMengajarPage from "./pages/admin/master/jadwal-mengajar/JadwalMengajarPage";
 
-// halaman dummy guru
-function GuruPage() {
-  return <h2>Halaman Guru</h2>;
-}
+import GuruLayout from "./pages/guru/GuruLayout"; 
+import GuruDashboardPage from "./pages/guru/dashboard/GuruDashboardPage"; 
+import MulaiMengajarPage from "./pages/guru/mulai-mengajar/MulaiMengajarPage"; 
+import JurnalKbmPage from "./pages/guru/jurnal-kbm/JurnalKbmPage"; 
+import AbsensiSiswaPage from "./pages/guru/absensi-siswa/AbsensiSiswaPage"; 
+import KedisiplinanPage from "./pages/guru/kedisiplinan/KedisiplinanPage"; 
+import RekapPresensiGuruPage from "./pages/guru/rekap-presensi/RekapPresensiGuruPage"; 
 
 function App() {
   return (
@@ -37,7 +40,7 @@ function App() {
         <Route path="master/pengguna" element={<PenggunaPage />} />
         <Route path="master/sekolah" element={<SekolahPage />} />
         <Route path="master/kelas" element={<KelasPage />} />
-        <Route path="master/siswa" element={<SiswaPage />}/>
+        <Route path="master/siswa" element={<SiswaPage />} />
         <Route path="master/mapel" element={<MapelPage />} />
         <Route path="master/pendaftaran-guru" element={<PendaftaranGuruPage />} />
         <Route path="master/jadwal-mengajar" element={<JadwalMengajarPage />} />
@@ -48,10 +51,18 @@ function App() {
         path="/guru"
         element={
           <ProtectedRoute roles={["guru"]}>
-            <GuruPage />
+            <GuruLayout />
           </ProtectedRoute>
-        }
-      />
+        } 
+      >
+        <Route index element={<GuruDashboardPage />} /> 
+        <Route path="mulai/:id_jadwal" element={<MulaiMengajarPage />} /> 
+
+        <Route path="jurnal-kbm" element={<JurnalKbmPage />} /> 
+        <Route path="absensi-siswa" element={<AbsensiSiswaPage />} /> 
+        <Route path="kedisiplinan" element={<KedisiplinanPage />} /> 
+        <Route path="rekap-presensi" element={<RekapPresensiGuruPage />} /> 
+      </Route>
 
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
