@@ -150,7 +150,8 @@ exports.getSemuaJadwal = async (req, res) => {
           k.nama_kelas,
           k.tingkat,
           m.nama_mapel,
-          s.nama_sekolah
+          s.nama_sekolah,
+          pg.id_sekolah AS id_sekolah 
        FROM jadwal_mengajar j
        JOIN pendaftaran_guru pg ON j.id_pendaftaran = pg.id_pendaftaran
        JOIN kelas k ON j.id_kelas = k.id_kelas
