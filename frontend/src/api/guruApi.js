@@ -10,4 +10,6 @@ export const guruApi = {
   absensiSiswa: (payload) => api.post("/guru/absensi-siswa", payload),
   jurnal: (payload) => api.post("/guru/jurnal", payload),
   catatanSiswa: (payload) => api.post("/guru/catatan-siswa", payload),
+
+  getSiswaByKelas: (id_kelas) => api.get(`/guru/siswa/kelas/${id_kelas}`),
 };

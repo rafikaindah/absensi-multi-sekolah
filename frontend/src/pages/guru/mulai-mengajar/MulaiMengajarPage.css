@@ -1,0 +1,115 @@
+/* box-sizing (padding + border tidak bikin elemen melebar di luar ukuran)*/
+*, *::before, *::after { box-sizing: border-box; }
+
+body{
+  font-size: 14px;
+  line-height: 1.5;
+  color: #111;
+}
+
+/* card */
+.gcard {
+  padding: 16px;
+}
+
+h1{
+  text-align: center;
+}
+
+h1,h2,h3{ 
+  margin: 0 0 10px; 
+  line-height: 1.2; 
+}
+
+label, p { 
+  margin: 0; 
+}
+
+/* tabel absensi */
+.gtable{
+  width: 100%;
+  margin-top: 8px;
+  border-collapse: separate;   
+  border-spacing: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid #e0e6e2;   
+}
+
+.gtable thead th{
+  text-align: left;
+  font-weight: 700;
+  padding: 12px;
+  background: #f4f7f5;         
+  border-bottom: 1px solid #e0e6e2;
+}
+
+.gtable tbody td{
+  padding: 12px;
+  border-bottom: 1px solid #e8eeea;   
+  background: #fff;
+  vertical-align: middle;
+}
+
+.gtable th:last-child,
+.gtable td:last-child{
+  width: 120px;
+  padding-right: 12px;
+}
+
+.gtable select{
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid #d7e2db;
+  background: #fff;
+}
+
+/* textarea jurnal */
+textarea{
+  width: 100%;
+  min-height: 90px;
+  display: block;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #d7e2db;
+  font: inherit;               
+  resize: vertical;
+}
+
+/* catatan siswa*/
+.gcatatan{
+  display: grid;
+  grid-template-columns: 2fr 1fr 3fr auto;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.gcatatan input, .gcatatan select, .gcatatan textarea, .gcatatan button{
+  font: inherit;
+}
+
+/* tombol simpan & selesai */
+.gprimary.big{
+  width: 100%;
+  height: 52px;
+  font-size: 16px;
+  border-radius: 14px;
+  display: block;
+  margin-top: 14px;
+}
+
+/* responsif */
+@media (max-width: 480px){
+  .gcatatan{
+    grid-template-columns: 1fr;
+  }
+
+  .gtable th:last-child,
+  .gtable td:last-child{
+    width: auto;
+    text-align: left; 
+  }
+}
