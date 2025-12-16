@@ -8,20 +8,23 @@ const guruController = require('../controllers/guruController'); //mengimpor con
 router.use(auth, roleCheck(['guru'])); 
 
 //checkin dan checkout routes
-router.post('/checkin', guruController.checkin); //rute untuk checkin
-router.post('/checkout', guruController.checkout); //rute untuk checkout
+router.post('/checkin', guruController.checkin); 
+router.post('/checkout', guruController.checkout); 
 
 // jadwal mengajar routes
-router.get('/jadwal-hari-ini', guruController.getJadwalHariIni); // rute untuk mendapatkan jadwal hari ini
-router.get('/jadwal-semua', guruController.getSemuaJadwal); // rute untuk mendapatkan semua jadwal
+router.get('/jadwal-hari-ini', guruController.getJadwalHariIni); 
+router.get('/jadwal-semua', guruController.getSemuaJadwal); 
 
 // absensi siswa (negatif) routes
-router.post('/absensi-siswa', guruController.absensiSiswa); // rute untuk menyimpan absensi siswa
+router.post('/absensi-siswa', guruController.absensiSiswa); 
 
 //jurnal mengajar routes
-router.post('/jurnal', guruController.jurnalMengajar); //rute untuk menyimpan mengajar guru
+router.post('/jurnal', guruController.jurnalMengajar); 
 
 //catatan siswa routes
-router.post('/catatan-siswa', guruController.catatanSiswa); //rute untuk menyimpan catatan siswa
+router.post('/catatan-siswa', guruController.catatanSiswa); 
+
+// daftar siswa berdasarkan kelas
+router.get('/siswa/kelas/:id_kelas', guruController.getSiswaByKelas);
 
 module.exports = router; //mengekspor router untuk digunakan di bagian lain aplikasi

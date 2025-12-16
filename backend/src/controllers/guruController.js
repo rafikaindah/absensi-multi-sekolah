@@ -144,6 +144,7 @@ exports.getSemuaJadwal = async (req, res) => {
     const [rows] = await pool.query(
       `SELECT 
           j.id_jadwal,
+          j.id_kelas AS id_kelas,
           j.hari,
           j.jam_mulai,
           j.jam_selesai,
@@ -238,3 +239,25 @@ exports.catatanSiswa = async (req, res) => {
     res.status(500).json({ message: 'Gagal menyimpan catatan siswa' });
   }
 };
+
+// fungsi mengambil daftar siswa berdasarkan kelas
+exports.getSiswaByKelas = async (req, res) => {
+  const { id_kelas } = req.params;
+
+  try {
+    const [rows] = await pool.query(
+      `SELECT id_siswa, nama_lengkap, nis
+       FROM siswa
+       WHERE id_kelas = ?
+       ORDER BY nama_lengkap`,
+      [id_kelas]
+    );
+
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Gagal mengambil data siswa" });
+  }
+};
+
+
