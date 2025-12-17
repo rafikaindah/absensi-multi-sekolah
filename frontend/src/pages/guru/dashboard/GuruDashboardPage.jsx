@@ -23,9 +23,9 @@ export default function GuruDashboardPage() {
 
           {/* judul + info hari/tanggal */}
           <div>
-            <h1>Dashboard Guru (Multi Sekolah)</h1>
+            <h1>Dashboard Guru</h1>
             <div className="gsub">
-              Hari: {c.hariIni} Tanggal: {c.tanggalIni}
+              Hari/Tanggal: {c.hariIni}, {c.tanggalIni}
             </div>
           </div>
         </div>
@@ -39,12 +39,10 @@ export default function GuruDashboardPage() {
         <div className="gcard">
           <div className="gcard-head">
             <h2>Presensi Guru Hari Ini</h2>
-            <div className="ghint">Mode manual</div>
           </div>
 
           {/* input id_sekolah untuk check-in/check-out */}
           <div className="gform-row">
-            <label>id_sekolah</label>
             <input
               value={c.presensiForm.id_sekolah}
               onChange={(e) => c.onChangePresensi("id_sekolah", e.target.value)}
@@ -64,7 +62,7 @@ export default function GuruDashboardPage() {
 
           {/* menampilkan sekolah yang sedang aktif */}
           <div className="gmini">
-            Sekolah aktif: <b>{c.activeSchool ? `ID ${c.activeSchool}` : "-"}</b>
+            Sekolah aktif: <b>{c.activeSchool ? `Id ${c.activeSchool}` : "-"}</b>
           </div>
         </div>
 
@@ -72,9 +70,6 @@ export default function GuruDashboardPage() {
         <div className="gcard">
           <div className="gcard-head">
             <h2>Jadwal Hari Ini</h2>
-            <div className="ghint">
-              Tombol “Mulai Mengajar” aktif jika sudah presensi sekolahnya.
-            </div>
           </div>
 
           {/* kondisi loading */}
@@ -122,29 +117,6 @@ export default function GuruDashboardPage() {
               })}
             </div>
           )}
-        </div>
-      </div>
-
-      {/* card menu cepat */}
-      <div className="gcard">
-        <div className="gcard-head">
-          <h2>Menu Utama</h2>
-        </div>
-
-        {/* tombol shortcut ke halaman-halaman utama */}
-        <div className="gquick">
-          <button className="gbtn" onClick={() => nav("/guru/jurnal-kbm")}>
-            Jurnal KBM
-          </button>
-          <button className="gbtn" onClick={() => nav("/guru/absensi-siswa")}>
-            Absensi Siswa
-          </button>
-          <button className="gbtn" onClick={() => nav("/guru/kedisiplinan")}>
-            Kedisiplinan
-          </button>
-          <button className="gbtn" onClick={() => nav("/guru/rekap-presensi")}>
-            Rekap Presensi
-          </button>
         </div>
       </div>
     </div>

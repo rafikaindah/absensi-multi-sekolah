@@ -31,15 +31,20 @@
 }
 
 /* tombol hamburger */
-.ghamburger {
-  width: 42px; 
-  height: 42px; 
+.ghamburger{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
   border-radius: 10px;
   border: 1px solid #d7e2db;
   background: #fff;
   cursor: pointer;
   font-weight: 900;
   font-size: 18px;
+  line-height: 1;
 }
 
 /* box error */
@@ -47,7 +52,6 @@
   padding: 12px 14px;
   border-radius: 12px;
   background: #fff5f5;
-  border: 1px solid #f3b7b7;
   color: #b42323;
   font-weight: 800;
 }
@@ -82,13 +86,6 @@
   color: #1a5e1f; 
 }
 
-/* teks hint kecil */
-.ghint { 
-  font-size: 12px; 
-  font-weight: 800; 
-  color: rgba(31,45,37,0.65); 
-}
-
 /* baris form input */
 .gform-row { 
   display: grid; 
@@ -108,12 +105,6 @@
   border: 1px solid #d7e2db;
   padding: 0 12px;
   outline: none;
-}
-
-/* efek fokus input */
-.gform-row input:focus { 
-  border-color: #1a5e1f; 
-  box-shadow: 0 0 0 3px rgba(26,94,31,0.12); 
 }
 
 /* baris tombol */
