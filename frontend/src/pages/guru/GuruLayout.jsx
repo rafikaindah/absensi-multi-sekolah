@@ -54,18 +54,6 @@ export default function GuruLayout() {
           <NavLink to="/guru" end className={({ isActive }) => `guru-item ${isActive ? "active" : ""}`}>
             Dashboard
           </NavLink>
-          <NavLink to="/guru/jurnal-kbm" className={({ isActive }) => `guru-item ${isActive ? "active" : ""}`}>
-            Jurnal KBM
-          </NavLink>
-          <NavLink to="/guru/absensi-siswa" className={({ isActive }) => `guru-item ${isActive ? "active" : ""}`}>
-            Absensi Siswa
-          </NavLink>
-          <NavLink to="/guru/kedisiplinan" className={({ isActive }) => `guru-item ${isActive ? "active" : ""}`}>
-            Kedisiplinan
-          </NavLink>
-          <NavLink to="/guru/rekap-presensi" className={({ isActive }) => `guru-item ${isActive ? "active" : ""}`}>
-            Rekap Presensi Guru
-          </NavLink>
         </nav>
 
          {/* tombol logout  */}

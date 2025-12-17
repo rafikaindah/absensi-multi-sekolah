@@ -14,11 +14,7 @@ import JadwalMengajarPage from "./pages/admin/master/jadwal-mengajar/JadwalMenga
 
 import GuruLayout from "./pages/guru/GuruLayout"; 
 import GuruDashboardPage from "./pages/guru/dashboard/GuruDashboardPage"; 
-import MulaiMengajarPage from "./pages/guru/mulai-mengajar/MulaiMengajarPage"; 
-import JurnalKbmPage from "./pages/guru/jurnal-kbm/JurnalKbmPage"; 
-import AbsensiSiswaPage from "./pages/guru/absensi-siswa/AbsensiSiswaPage"; 
-import KedisiplinanPage from "./pages/guru/kedisiplinan/KedisiplinanPage"; 
-import RekapPresensiGuruPage from "./pages/guru/rekap-presensi/RekapPresensiGuruPage"; 
+import MulaiMengajarPage from "./pages/guru/mulai-mengajar/MulaiMengajarPage";
 
 function App() {
   return (
@@ -57,11 +53,6 @@ function App() {
       >
         <Route index element={<GuruDashboardPage />} /> 
         <Route path="mulai/:id_jadwal" element={<MulaiMengajarPage />} /> 
-
-        <Route path="jurnal-kbm" element={<JurnalKbmPage />} /> 
-        <Route path="absensi-siswa" element={<AbsensiSiswaPage />} /> 
-        <Route path="kedisiplinan" element={<KedisiplinanPage />} /> 
-        <Route path="rekap-presensi" element={<RekapPresensiGuruPage />} /> 
       </Route>
 
       <Route path="*" element={<Navigate to="/login" />} />
