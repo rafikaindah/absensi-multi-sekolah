@@ -38,10 +38,21 @@ export function useGuruDashboardController() {
     () => loadJson(storageKeys.sesiBySchool, {})
   );
 
+  // state cache "selesai mengajar" per jadwal (dari localStorage)
+  const [selesaiByJadwal, setSelesaiByJadwal] = useState(
+    () => loadJson(storageKeys.selesaiByJadwal, {})
+  );
+
   // menyimpan sesi presensi per sekolah ke state + localStorage
   const persistSesi = (next) => {
     setSesiBySchool(next);
     localStorage.setItem(storageKeys.sesiBySchool, JSON.stringify(next));
+  };
+
+ // simpan cache selesai per jadwal ke state + localStorage
+  const persistSelesai = (next) => {
+    setSelesaiByJadwal(next);
+    localStorage.setItem(storageKeys.selesaiByJadwal, JSON.stringify(next));
   };
 
   // set sekolah aktif ke state + localStorage
@@ -138,14 +149,46 @@ export function useGuruDashboardController() {
   const canMulaiMengajar = (row) => {
     // ambil id sekolah dari row jadwal
     const id_sekolah = String(row.id_sekolah || row.id_sekolah_jadwal || "");
+    const id_jadwal = String(row.id_jadwal || "");
 
     //jika API jadwal belum kirim id_sekolah, tombol akan selalu nonaktif
-    if (!id_sekolah) return false;
+    if (!id_sekolah || !id_jadwal) return false;
 
     // tombol aktif kalau sudah check-in di sekolah itu hari ini
     const sesi = sesiBySchool[id_sekolah];
-    return sesi && sesi.tanggal === tanggalIni && sesi.waktu_masuk;
+    const presensiOk = sesi && sesi.tanggal === tanggalIni && sesi.waktu_masuk;
+
+    if (!presensiOk) return false;
+
+    const selesai = selesaiByJadwal[id_jadwal];
+    const sudahSelesaiHariIni = selesai?.tanggal === tanggalIni && selesai?.selesai;
+
+    return !sudahSelesaiHariIni;
   };
+
+  // status jadwal
+  const getStatusJadwal = (row) => {
+    const id_sekolah = String(row.id_sekolah || row.id_sekolah_jadwal || "");
+    const id_jadwal = String(row.id_jadwal || "");
+
+    if (!id_sekolah || !id_jadwal) {
+      return { text: "BELUM PRESENSI", tone: "warn" };
+    }
+
+    const selesai = selesaiByJadwal[id_jadwal];
+    if (selesai?.tanggal === tanggalIni && selesai?.selesai) {
+      return { text: "SUDAH SELESAI", tone: "done" };
+    }
+
+    const sesi = sesiBySchool[id_sekolah];
+    const presensiOk = sesi && sesi.tanggal === tanggalIni && sesi.waktu_masuk;
+    if (presensiOk) {
+      return { text: "PRESENSI AKTIF", tone: "ok" };
+    }
+
+    return { text: "BELUM PRESENSI", tone: "warn" };
+  };
+
 
   return {
     loading, error, setError,
@@ -156,5 +199,10 @@ export function useGuruDashboardController() {
     handleCheckin,
     handleCheckout,
     canMulaiMengajar,
+
+    getStatusJadwal,
+
+    selesaiByJadwal,
+    persistSelesai,
   };
 }

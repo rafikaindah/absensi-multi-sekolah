@@ -83,6 +83,7 @@ export default function GuruDashboardPage() {
             <div className="gschedule">
               {c.jadwalHariIni.map((j) => {
                 const ok = c.canMulaiMengajar(j);
+                const st = c.getStatusJadwal(j);
 
                 return (
                   <div className="gschedule-item" key={j.id_jadwal}>
@@ -98,8 +99,8 @@ export default function GuruDashboardPage() {
                       <div><b>Sekolah:</b> {j.nama_sekolah}</div>
 
                       {/* status presensi */}
-                      <div className={`gstatus ${ok ? "ok" : "warn"}`}>
-                        {ok ? "PRESENSI AKTIF " : "BELUM PRESENSI "}
+                      <div className={`gstatus ${st.tone}`}>
+                        {st.text}
                       </div>
                     </div>
 
@@ -108,7 +109,7 @@ export default function GuruDashboardPage() {
                       className={`gprimary ${ok ? "" : "disabled"}`}
                       disabled={!ok}
                       onClick={() => nav(`/guru/mulai/${j.id_jadwal}`)}
-                      title={!ok ? "Presensi dulu di sekolah ini" : "Mulai mengajar"}
+                      title={!ok ? "Presensi dulu / jadwal sudah selesai" : "Mulai mengajar"}
                     >
                       Mulai Mengajar
                     </button>

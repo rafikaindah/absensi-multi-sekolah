@@ -197,6 +197,9 @@
 .gstatus.warn { 
   color: #b45309; 
 }
+.gstatus.done { 
+  color: #000000; 
+}
 
 /* menu cepat */
 .gquick { 
