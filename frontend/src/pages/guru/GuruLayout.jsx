@@ -54,6 +54,10 @@ export default function GuruLayout() {
           <NavLink to="/guru" end className={({ isActive }) => `guru-item ${isActive ? "active" : ""}`}>
             Dashboard
           </NavLink>
+
+          <NavLink to="/guru/report-guru" className={({ isActive }) => `guru-item ${isActive ? "active" : ""}`}>
+            Report Guru
+          </NavLink>
         </nav>
 
          {/* tombol logout  */}

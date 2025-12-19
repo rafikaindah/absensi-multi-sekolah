@@ -1,0 +1,173 @@
+/* halaman utama */
+.rpage { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 14px; 
+  color: #1f2937; 
+}
+
+/* header atas (tombol hamburger + judul) */
+.rhead { 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+}
+
+/* tombol hamburger */
+.rhamburger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 10px;
+  border: 1px solid #d7e2db;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* judul halaman */
+.rhead h1 { 
+  margin: 0; 
+  font-size: 26px; 
+  font-weight: 900; 
+  color: #132019; 
+}
+
+/* alert error */
+.ralert {
+  padding: 12px 14px; 
+  border-radius: 12px;
+  background: #fff5f5; 
+  border: 1px solid #f3b7b7; 
+  color: #b42323; 
+}
+
+/* card */
+.rcard {
+  background: #fff; 
+  border: 1px solid #dfe7e1; 
+  border-radius: 14px; 
+  padding: 14px;
+}
+
+/* area filter */
+.rfilters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  align-items: end;
+}
+
+/* label input */
+.rfield label { 
+  display: block; 
+  font-weight: 900; 
+  font-size: 13px; 
+  color: #2b3a31; 
+  margin-bottom: 6px; 
+}
+
+/* input date */
+.rfield input {
+  height: 44px; 
+  border-radius: 12px; 
+  border: 1px solid #d7e2db; 
+  padding: 0 12px; 
+  outline: none;
+}
+
+/* tombol terapkan filter */
+.rprimary {
+  height: 44px; 
+  border-radius: 12px; 
+  border: 1px solid #1a5e1f;
+  background: #1a5e1f; 
+  color: #fff; 
+  cursor: pointer; 
+  font-weight: 900;
+}
+
+/* teks status */
+.rstate { 
+  padding: 10px 2px; 
+  font-weight: 850; 
+  color: rgba(31,45,37,0.7); 
+}
+
+/* wrapper tabel */
+.rtablewrap { 
+  width: 100%; 
+  overflow-x: auto; 
+  margin-top: 10px; 
+}
+
+/* style tabel */
+.rtable { 
+  width: 100%; 
+  border-collapse: collapse; 
+  min-width: 860px; 
+}
+
+/* header tabel */
+.rtable thead th {
+  text-align: left; 
+  font-size: 13px; 
+  font-weight: 900;
+  color: #2b3a31; 
+  background: #f6faf7; 
+  padding: 12px 14px;
+  border-bottom: 1px solid #e7efe9;
+}
+
+/* isi tabel */
+.rtable tbody td {
+  padding: 12px 14px; 
+  border-bottom: 1px solid #eef3f0;
+  font-size: 12px; 
+  font-weight: 500; 
+  color: #1f2937;
+}
+
+/* kolom materi dan catatan */
+.rdesc { 
+  max-width: 520px; 
+  white-space: pre-wrap; 
+}
+
+/* select dropdown sekolah */
+.rfield select {
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid #d7e2db;
+  padding: 0 12px;
+  outline: none;
+  background: #fff;
+  font-weight: 800;
+}
+
+/* grup sekolah */
+.rgroup {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #eef3f0;
+}
+
+/* judul grup sekolah */
+.rgroup-title {
+  font-size: 16px;
+  font-weight: 950;
+  color: #1f2d25;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) { 
+  .rhead h1 { 
+    font-size: 22px; 
+  } 
+}

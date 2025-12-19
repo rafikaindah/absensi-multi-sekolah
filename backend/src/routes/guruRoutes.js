@@ -27,4 +27,7 @@ router.post('/catatan-siswa', guruController.catatanSiswa);
 // daftar siswa berdasarkan kelas
 router.get('/siswa/kelas/:id_kelas', guruController.getSiswaByKelas);
 
+//report guru
+router.get('/report-guru', guruController.getReportGuru);
+
 module.exports = router; //mengekspor router untuk digunakan di bagian lain aplikasi

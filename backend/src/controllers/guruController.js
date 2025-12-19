@@ -260,4 +260,69 @@ exports.getSiswaByKelas = async (req, res) => {
   }
 };
 
+//fungsi report guru
+exports.getReportGuru = async (req, res) => {
+  const id_pengguna = req.user.id_pengguna;
+  const { start, end, id_sekolah } = req.query;
 
+  if (!start || !end) {
+    return res.status(400).json({ message: "start dan end wajib diisi" });
+  }
+
+  try {
+    //absensi guru
+    const [absensiGuru] = await pool.query(
+      `
+      SELECT 
+        sag.id_sesi,
+        sag.tanggal,
+        sag.waktu_masuk,
+        sag.waktu_pulang,
+        sk.id_sekolah,
+        sk.nama_sekolah
+      FROM sesi_absensi_guru sag
+      JOIN sekolah sk ON sag.id_sekolah = sk.id_sekolah
+      WHERE sag.id_pengguna = ?
+        AND sag.tanggal BETWEEN ? AND ?
+        AND (? IS NULL OR sag.id_sekolah = ?)
+      ORDER BY sag.tanggal DESC, sk.nama_sekolah
+      `,
+      [id_pengguna, start, end, id_sekolah || null, id_sekolah || null]
+    );
+
+    //jurnal kbm
+    const [jurnal] = await pool.query(
+      `
+      SELECT 
+        jm.id_jurnal,
+        jm.timestamp,
+        jm.materi_diajarkan,
+        jm.catatan_kegiatan,
+        sk.id_sekolah,
+        sk.nama_sekolah,
+        k.tingkat,
+        k.nama_kelas,
+        m.nama_mapel,
+        j.hari,
+        j.jam_mulai,
+        j.jam_selesai
+      FROM jurnal_mengajar jm
+      JOIN sesi_absensi_guru sag ON jm.id_sesi_guru = sag.id_sesi
+      JOIN sekolah sk ON sag.id_sekolah = sk.id_sekolah
+      JOIN jadwal_mengajar j ON jm.id_jadwal = j.id_jadwal
+      JOIN kelas k ON j.id_kelas = k.id_kelas
+      JOIN mata_pelajaran m ON j.id_mapel = m.id_mapel
+      WHERE sag.id_pengguna = ?
+        AND DATE(jm.timestamp) BETWEEN ? AND ?
+        AND (? IS NULL OR sag.id_sekolah = ?)
+      ORDER BY jm.timestamp DESC, sk.nama_sekolah, k.nama_kelas
+      `,
+      [id_pengguna, start, end, id_sekolah || null, id_sekolah || null]
+    );
+
+    res.json({ absensiGuru, jurnal });
+  } catch (err) {
+    console.error("getReportGuru error:", err);
+    res.status(500).json({ message: "Gagal mengambil report guru" });
+  }
+};
