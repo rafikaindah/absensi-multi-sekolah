@@ -326,3 +326,129 @@ exports.getReportGuru = async (req, res) => {
     res.status(500).json({ message: "Gagal mengambil report guru" });
   }
 };
+
+//fungsi report siswa
+exports.getReportSiswa = async (req, res) => {
+  const id_pengguna = req.user.id_pengguna;
+  const { start, end, id_sekolah, id_kelas } = req.query;
+
+  if (!start || !end) {
+    return res.status(400).json({ message: "start dan end wajib diisi" });
+  }
+
+  try {
+    // absensi siswa
+    const [absensi] = await pool.query(
+      `
+      SELECT 
+        a.id_absensi_siswa,
+        a.tanggal,
+        a.status,
+        s.id_siswa,
+        s.nama_lengkap,
+        s.nis,
+        k.id_kelas,
+        k.nama_kelas,
+        k.tingkat,
+        sk.id_sekolah,
+        sk.nama_sekolah,
+        m.nama_mapel,
+        j.jam_mulai,
+        j.jam_selesai
+      FROM absensi_siswa a
+      JOIN siswa s ON a.id_siswa = s.id_siswa
+      JOIN jadwal_mengajar j ON a.id_jadwal = j.id_jadwal
+      JOIN kelas k ON j.id_kelas = k.id_kelas
+      JOIN mata_pelajaran m ON j.id_mapel = m.id_mapel
+      JOIN sesi_absensi_guru sag ON a.id_sesi_guru = sag.id_sesi
+      JOIN sekolah sk ON sag.id_sekolah = sk.id_sekolah
+      WHERE sag.id_pengguna = ?
+        AND a.tanggal BETWEEN ? AND ?
+        AND (? IS NULL OR sag.id_sekolah = ?)
+        AND (? IS NULL OR j.id_kelas = ?)
+      ORDER BY a.tanggal DESC, sk.nama_sekolah, k.nama_kelas, s.nama_lengkap
+      `,
+      [
+        id_pengguna,
+        start,
+        end,
+        id_sekolah || null,
+        id_sekolah || null,
+        id_kelas || null,
+        id_kelas || null,
+      ]
+    );
+
+    //catatan siswa
+    const [catatan] = await pool.query(
+      `
+      SELECT
+        c.id_catatan,
+        c.timestamp,
+        c.jenis_catatan,
+        c.deskripsi,
+        s.id_siswa,
+        s.nama_lengkap,
+        s.nis,
+        k.id_kelas,
+        k.nama_kelas,
+        k.tingkat,
+        sk.id_sekolah,
+        sk.nama_sekolah
+      FROM catatan_siswa c
+      JOIN siswa s ON c.id_siswa = s.id_siswa
+      JOIN sesi_absensi_guru sag ON c.id_sesi_guru = sag.id_sesi
+      JOIN sekolah sk ON sag.id_sekolah = sk.id_sekolah
+      LEFT JOIN kelas k ON s.id_kelas = k.id_kelas
+      WHERE sag.id_pengguna = ?
+        AND DATE(c.timestamp) BETWEEN ? AND ?
+        AND (? IS NULL OR sag.id_sekolah = ?)
+        AND (? IS NULL OR s.id_kelas = ?)
+      ORDER BY c.timestamp DESC, sk.nama_sekolah, k.nama_kelas, s.nama_lengkap
+      `,
+      [
+        id_pengguna,
+        start,
+        end,
+        id_sekolah || null,
+        id_sekolah || null,
+        id_kelas || null,
+        id_kelas || null,
+      ]
+    );
+
+    res.json({ absensi, catatan });
+  } catch (err) {
+    console.error("getReportSiswa error:", err);
+    res.status(500).json({ message: "Gagal mengambil report siswa" });
+  }
+};
+
+//fungsi mengambil kelas berdasarkan sekolah
+exports.getKelasBySekolah = async (req, res) => {
+  const id_pengguna = req.user.id_pengguna;
+  const { id_sekolah } = req.params;
+
+  try {
+    const [rows] = await pool.query(
+      `
+      SELECT DISTINCT
+        k.id_kelas,
+        k.nama_kelas,
+        k.tingkat
+      FROM jadwal_mengajar j
+      JOIN pendaftaran_guru pg ON j.id_pendaftaran = pg.id_pendaftaran
+      JOIN kelas k ON j.id_kelas = k.id_kelas
+      WHERE pg.id_pengguna = ?
+        AND pg.id_sekolah = ?
+      ORDER BY k.tingkat, k.nama_kelas
+      `,
+      [id_pengguna, id_sekolah]
+    );
+
+    res.json(rows);
+  } catch (err) {
+    console.error("getKelasBySekolah error:", err);
+    res.status(500).json({ message: "Gagal mengambil kelas berdasarkan sekolah" });
+  }
+};

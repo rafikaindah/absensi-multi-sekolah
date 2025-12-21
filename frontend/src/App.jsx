@@ -16,6 +16,7 @@ import GuruLayout from "./pages/guru/GuruLayout";
 import GuruDashboardPage from "./pages/guru/dashboard/GuruDashboardPage"; 
 import MulaiMengajarPage from "./pages/guru/mulai-mengajar/MulaiMengajarPage";
 import ReportGuruPage from "./pages/guru/report-guru/ReportGuruPage";
+import ReportSiswaPage from "./pages/guru/report-siswa/ReportSiswaPage";
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
         <Route index element={<GuruDashboardPage />} /> 
         <Route path="mulai/:id_jadwal" element={<MulaiMengajarPage />} /> 
         <Route path="report-guru" element={<ReportGuruPage />} />
+        <Route path="report-siswa" element={<ReportSiswaPage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/login" />} />

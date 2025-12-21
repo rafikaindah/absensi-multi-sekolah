@@ -12,6 +12,8 @@ export const guruApi = {
   catatanSiswa: (payload) => api.post("/guru/catatan-siswa", payload),
 
   getSiswaByKelas: (id_kelas) => api.get(`/guru/siswa/kelas/${id_kelas}`),
+  getKelasBySekolah: (id_sekolah) => api.get(`/guru/kelas/sekolah/${id_sekolah}`),
 
   reportGuru: (params) => api.get("/guru/report-guru", { params }),
+  reportSiswa: (params) => api.get("/guru/report-siswa", { params }),
 };
