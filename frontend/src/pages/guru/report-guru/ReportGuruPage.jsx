@@ -76,7 +76,7 @@ export default function ReportGuruPage() {
         ) : (
           c.groupedAbsensi.map((g) => (
             <div className="rgroup" key={g.nama_sekolah}>
-              <div className="rgroup-title">{g.nama_sekolah}</div>
+              <div className="rgroup-title">Sekolah: {g.nama_sekolah}</div>
 
               <div className="rtablewrap">
                 <table className="rtable">
@@ -114,7 +114,7 @@ export default function ReportGuruPage() {
         ) : (
           c.groupedJurnal.map((g) => (
             <div className="rgroup" key={g.nama_sekolah}>
-              <div className="rgroup-title">{g.nama_sekolah}</div>
+              <div className="rgroup-title">Sekolah: {g.nama_sekolah}</div>
 
               <div className="rtablewrap">
                 <table className="rtable">
@@ -131,7 +131,7 @@ export default function ReportGuruPage() {
                     {g.rows.map((j) => (
                       <tr key={j.id_jurnal}>
                         <td>{j.waktu_fmt}</td>
-                        <td>{j.nama_kelas}</td>
+                        <td>{j.tingkat}-{j.nama_kelas}</td>
                         <td>{j.nama_mapel}</td>
                         <td className="rdesc">{j.materi_diajarkan || "-"}</td>
                         <td className="rdesc">{j.catatan_kegiatan || "-"}</td>
