@@ -52,8 +52,8 @@
   padding: 12px 14px;
   border-radius: 12px;
   background: #fff5f5;
+  border: 1px solid #f3b7b7;
   color: #b42323;
-  font-weight: 800;
 }
 
 /* grid card */

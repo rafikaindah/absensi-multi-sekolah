@@ -9,9 +9,6 @@ export default function MulaiMengajarPage() {
   // tampilan saat loading
   if (c.loading) return <div className="gstate">Memuat...</div>;
 
-  // tampilan saat error
-  if (c.error) return <div className="galert">{c.error}</div>;
-
   return (
     <div className="gpage">
       {/* header + tombol hamburger */}
@@ -59,6 +56,8 @@ export default function MulaiMengajarPage() {
           </tbody>
         </table>
       </div>
+
+      {c.error && <div className="galert">{c.error}</div>}
 
       {/* card jurnal mengajar */}
       <div className="gcard">
