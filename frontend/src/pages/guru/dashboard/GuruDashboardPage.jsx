@@ -95,7 +95,7 @@ export default function GuruDashboardPage() {
                     {/* info detail jadwal */}
                     <div className="gmeta">
                       <div><b>Mapel:</b> {j.nama_mapel}</div>
-                      <div><b>Kelas:</b> {j.nama_kelas}</div>
+                      <div><b>Kelas:</b> {j.tingkat}{j.nama_kelas}</div>
                       <div><b>Sekolah:</b> {j.nama_sekolah}</div>
 
                       {/* status presensi */}

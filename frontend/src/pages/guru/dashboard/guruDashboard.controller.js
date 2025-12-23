@@ -2,16 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import dayjs from "dayjs";
 import { guruApi } from "../../../api/guruApi";
 import { todayHariIndo } from "../../../utils/hariIndo";
-import { emptyPresensiForm, storageKeys } from "./guruDashboard.model";
+import { emptyPresensiForm } from "./guruDashboard.model";
 
 // mengambil tanggal hari ini format YYYY-MM-DD
 const today = () => dayjs().format("YYYY-MM-DD");
-
-// mengambil data JSON dari localStorage 
-const loadJson = (key, fallback) => {
-  try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
-  catch { return fallback; }
-};
 
 export function useGuruDashboardController() {
   // state loading & error 
@@ -25,46 +19,47 @@ export function useGuruDashboardController() {
   const [jadwalAll, setJadwalAll] = useState([]);
 
   // mengambil hari dan tanggal hari ini 
-  const hariIni = useMemo(() => todayHariIndo(), []);
-  const tanggalIni = useMemo(() => today(), []);
+  const [tanggalIni] = useState(() => today());
+  const [hariIni] = useState(() => todayHariIndo());
 
-  // state sekolah aktif 
-  const [activeSchool, setActiveSchool] = useState(
-    () => localStorage.getItem(storageKeys.activeSchool) || ""
-  );
+  // state sekolah aktif
+  const [activeSchool, setActiveSchool] = useState("");
+  // state sesi presensi aktif per sekolah
+  const [sesiBySchool, setSesiBySchool] = useState({});
+  // state status selesai per jadwal
+  const [selesaiByJadwal, setSelesaiByJadwal] = useState({});
 
-  // state cache sesi presensi per sekolah 
-  const [sesiBySchool, setSesiBySchool] = useState(
-    () => loadJson(storageKeys.sesiBySchool, {})
-  );
-
-  // state cache "selesai mengajar" per jadwal (dari localStorage)
-  const [selesaiByJadwal, setSelesaiByJadwal] = useState(
-    () => loadJson(storageKeys.selesaiByJadwal, {})
-  );
-
-  // menyimpan sesi presensi per sekolah ke state + localStorage
+  // menyimpan sesi presensi per sekolah ke state
   const persistSesi = (next) => {
     setSesiBySchool(next);
-    localStorage.setItem(storageKeys.sesiBySchool, JSON.stringify(next));
   };
 
- // simpan cache selesai per jadwal ke state + localStorage
+ // simpan cache selesai per jadwal ke state
   const persistSelesai = (next) => {
     setSelesaiByJadwal(next);
-    localStorage.setItem(storageKeys.selesaiByJadwal, JSON.stringify(next));
   };
 
-  // set sekolah aktif ke state + localStorage
+  // set sekolah aktif ke state
   const setActive = (id_sekolah) => {
     setActiveSchool(id_sekolah);
-    localStorage.setItem(storageKeys.activeSchool, id_sekolah);
   };
 
   // mengambil semua jadwal mengajar dari API
   const fetchJadwal = async () => {
     const res = await guruApi.getSemuaJadwal();
     setJadwalAll(res.data || []);
+  };
+
+  // sinkron presensi hari ini dari backend
+  const syncPresensiHariIni = async () => {
+    const res = await guruApi.getPresensiHariIni({ tanggal: tanggalIni });
+    persistSesi(res.data?.bySchool || {});
+  };
+
+  // sinkron jadwal selesai hari ini dari backend
+  const syncSelesaiHariIni = async () => {
+    const res = await guruApi.getJadwalSelesaiHariIni({ tanggal: tanggalIni });
+    persistSelesai(res.data?.byJadwal || {});
   };
 
   // load data saat halaman pertama kali dibuka
@@ -74,6 +69,7 @@ export function useGuruDashboardController() {
         setLoading(true);
         setError("");
         await fetchJadwal();
+        await Promise.all([syncPresensiHariIni(), syncSelesaiHariIni()]);
       } catch (e) {
         setError(e.response?.data?.message || "Gagal memuat dashboard guru");
       } finally {
@@ -99,20 +95,10 @@ export function useGuruDashboardController() {
     if (!id_sekolah) return setError("id_sekolah wajib diisi (mode manual).");
 
     try {
-      const res = await guruApi.checkin({ id_sekolah });
+      await guruApi.checkin({ id_sekolah });
 
-      // simpan status check-in per sekolah untuk hari ini
-      const next = {
-        ...sesiBySchool,
-        [id_sekolah]: {
-          id_sesi: res.data.id_sesi,
-          tanggal: tanggalIni,
-          waktu_masuk: "OK",
-          waktu_pulang: null,
-        },
-      };
+      await Promise.all([syncPresensiHariIni(), syncSelesaiHariIni()]);
 
-      persistSesi(next);
       setActive(id_sekolah);
     } catch (e) {
       setError(e.response?.data?.message || "Gagal check-in");
@@ -128,17 +114,8 @@ export function useGuruDashboardController() {
     try {
       await guruApi.checkout({ id_sekolah });
 
-      // update status check-out per sekolah untuk hari ini
-      const next = {
-        ...sesiBySchool,
-        [id_sekolah]: {
-          ...(sesiBySchool[id_sekolah] || {}),
-          tanggal: tanggalIni,
-          waktu_pulang: "OK",
-        },
-      };
+      await Promise.all([syncPresensiHariIni(), syncSelesaiHariIni()]);
 
-      persistSesi(next);
       setActive(id_sekolah);
     } catch (e) {
       setError(e.response?.data?.message || "Gagal check-out");
@@ -203,6 +180,8 @@ export function useGuruDashboardController() {
     getStatusJadwal,
 
     selesaiByJadwal,
-    persistSelesai,
+
+    syncPresensiHariIni,
+    syncSelesaiHariIni,
   };
 }

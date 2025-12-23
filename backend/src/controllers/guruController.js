@@ -452,3 +452,67 @@ exports.getKelasBySekolah = async (req, res) => {
     res.status(500).json({ message: "Gagal mengambil kelas berdasarkan sekolah" });
   }
 };
+
+
+// fungsi mengambil presensi guru hari ini
+exports.getPresensiHariIni = async (req, res) => {
+  const id_pengguna = req.user.id_pengguna;
+  const tanggal = req.query.tanggal || todayDate();
+
+  try {
+    const [rows] = await pool.query(
+      `SELECT id_sesi, id_sekolah, tanggal, waktu_masuk, waktu_pulang
+       FROM sesi_absensi_guru
+       WHERE id_pengguna = ? AND tanggal = ?
+       ORDER BY waktu_masuk DESC`,
+      [id_pengguna, tanggal]
+    );
+
+    const bySchool = {};
+    for (const r of rows) {
+      bySchool[String(r.id_sekolah)] = {
+        id_sesi: r.id_sesi,
+        tanggal: dayjs(r.tanggal).format("YYYY-MM-DD"),
+        waktu_masuk: r.waktu_masuk,
+        waktu_pulang: r.waktu_pulang,
+      };
+    }
+
+    res.json({ bySchool });
+  } catch (err) {
+    console.error("getPresensiHariIni error:", err);
+    res.status(500).json({ message: "Gagal mengambil presensi hari ini" });
+  }
+};
+
+
+// fungsi mengambil daftar jadwal yang sudah "selesai" hari ini
+exports.getJadwalSelesaiHariIni = async (req, res) => {
+  const id_pengguna = req.user.id_pengguna;
+  const tanggal = req.query.tanggal || todayDate();
+
+  try {
+    const [rows] = await pool.query(
+      `SELECT jm.id_jadwal, DATE(jm.timestamp) AS tanggal
+       FROM jurnal_mengajar jm
+       JOIN sesi_absensi_guru sag ON jm.id_sesi_guru = sag.id_sesi
+       WHERE sag.id_pengguna = ?
+         AND DATE(jm.timestamp) = ?
+       GROUP BY jm.id_jadwal`,
+      [id_pengguna, tanggal]
+    );
+
+    const byJadwal = {};
+    for (const r of rows) {
+      byJadwal[String(r.id_jadwal)] = {
+        tanggal: dayjs(r.tanggal).format("YYYY-MM-DD"),
+        selesai: true,
+      };
+    }
+
+    res.json({ byJadwal });
+  } catch (err) {
+    console.error("getJadwalSelesaiHariIni error:", err);
+    res.status(500).json({ message: "Gagal mengambil status selesai hari ini" });
+  }
+};

@@ -34,4 +34,8 @@ router.get("/kelas/sekolah/:id_sekolah", guruController.getKelasBySekolah);
 router.get('/report-guru', guruController.getReportGuru);
 router.get('/report-siswa', guruController.getReportSiswa);
 
+//status presensi & status selesai (hari ini)
+router.get('/presensi-hari-ini', guruController.getPresensiHariIni);
+router.get('/jadwal-selesai-hari-ini', guruController.getJadwalSelesaiHariIni);
+
 module.exports = router; //mengekspor router untuk digunakan di bagian lain aplikasi

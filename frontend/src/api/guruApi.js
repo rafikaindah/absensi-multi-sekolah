@@ -16,4 +16,8 @@ export const guruApi = {
 
   reportGuru: (params) => api.get("/guru/report-guru", { params }),
   reportSiswa: (params) => api.get("/guru/report-siswa", { params }),
+
+  getPresensiHariIni: (params) => api.get("/guru/presensi-hari-ini", { params }),
+  getJadwalSelesaiHariIni: (params) => api.get("/guru/jadwal-selesai-hari-ini", { params }),
+
 };
