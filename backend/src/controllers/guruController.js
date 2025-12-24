@@ -262,11 +262,19 @@ exports.getSiswaByKelas = async (req, res) => {
 
 //fungsi report guru
 exports.getReportGuru = async (req, res) => {
-  const id_pengguna = req.user.id_pengguna;
-  const { start, end, id_sekolah } = req.query;
+  const { start, end, id_sekolah, id_pengguna } = req.query;
 
   if (!start || !end) {
     return res.status(400).json({ message: "start dan end wajib diisi" });
+  }
+
+  const targetIdPengguna =
+    req.user.peran === "admin"
+      ? (id_pengguna ? Number(id_pengguna) : null)
+      : req.user.id_pengguna;
+
+  if (req.user.peran === "admin" && !targetIdPengguna) {
+    return res.status(400).json({ message: "Admin wajib memilih guru (id_pengguna)" });
   }
 
   try {
@@ -287,7 +295,7 @@ exports.getReportGuru = async (req, res) => {
         AND (? IS NULL OR sag.id_sekolah = ?)
       ORDER BY sag.tanggal DESC, sk.nama_sekolah
       `,
-      [id_pengguna, start, end, id_sekolah || null, id_sekolah || null]
+      [targetIdPengguna, start, end, id_sekolah || null, id_sekolah || null]
     );
 
     //jurnal kbm
@@ -317,7 +325,7 @@ exports.getReportGuru = async (req, res) => {
         AND (? IS NULL OR sag.id_sekolah = ?)
       ORDER BY jm.timestamp DESC, sk.nama_sekolah, k.nama_kelas
       `,
-      [id_pengguna, start, end, id_sekolah || null, id_sekolah || null]
+      [targetIdPengguna, start, end, id_sekolah || null, id_sekolah || null]
     );
 
     res.json({ absensiGuru, jurnal });
@@ -516,3 +524,30 @@ exports.getJadwalSelesaiHariIni = async (req, res) => {
     res.status(500).json({ message: "Gagal mengambil status selesai hari ini" });
   }
 };
+
+// fungsi mengambil daftar sekolah berdasarkan guru
+exports.getSekolahByGuru = async (req, res) => {
+  const { id_pengguna } = req.params;
+
+  try {
+    const [rows] = await pool.query(
+      `
+      SELECT DISTINCT
+        sk.id_sekolah,
+        sk.nama_sekolah
+      FROM pendaftaran_guru pg
+      JOIN sekolah sk ON pg.id_sekolah = sk.id_sekolah
+      WHERE pg.id_pengguna = ?
+      ORDER BY sk.nama_sekolah
+      `,
+      [id_pengguna]
+    );
+
+    res.json(rows);
+  } catch (err) {
+    console.error("getSekolahByGuru error:", err);
+    res.status(500).json({ message: "Gagal mengambil sekolah guru" });
+  }
+};
+
+

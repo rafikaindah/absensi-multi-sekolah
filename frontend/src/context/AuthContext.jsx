@@ -4,11 +4,19 @@ import api from '../api/axiosClient'; //mengimpor axios client yang sudah ada to
 export const AuthContext = createContext(); //membuat context untuk autentikasi
 
 export function AuthProvider({ children }) { //provider untuk membungkus seluruh aplikasi
-  const [user, setUser] = useState(null); //state untuk menyimpan data user yang login
+  const [user, setUser] = useState(() => {
+    //mengambil data user dari localStorage saat inisialisasi state (agar tidak null saat refresh)
+    const saved = localStorage.getItem("user");
+    return saved ? JSON.parse(saved) : null; //jika ada data, parse JSON jadi object; jika tidak ada, set null
+  }); 
 
-  useEffect(() => { //mengecek user tersimpan saat komponen pertama kali dimuat
-    const savedUser = localStorage.getItem('user'); //mengambil user dari localStorage
-    if (savedUser) setUser(JSON.parse(savedUser)); //jika ada, set user ke state
+  const [authReady, setAuthReady] = useState(false); //mengecek autentikasi awal sudah selesai atau belum
+
+  useEffect(() => { 
+    //sinkronisasi ulang state user dari localStorage saat pertama kali app dijalankan
+    const saved = localStorage.getItem("user");
+    setUser(saved ? JSON.parse(saved) : null); //set user sesuai data tersimpan/null
+    setAuthReady(true);
   }, []);
 
   const login = async (email, password) => { //fungsi login pengguna
@@ -25,7 +33,7 @@ export function AuthProvider({ children }) { //provider untuk membungkus seluruh
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, authReady, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

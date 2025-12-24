@@ -11,6 +11,9 @@ export default function AdminLayout() {
   //state buka/tutup master data
   const [openMaster, setOpenMaster] = useState(false); 
 
+  //state buka/tutup report
+  const [openReport, setOpenReport] = useState(false);
+
   //state buka/tutup sidebar
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
@@ -21,9 +24,8 @@ export default function AdminLayout() {
 
   useEffect(() => {
     
-    if (location.pathname.startsWith("/admin/master")) {
-      setOpenMaster(true);
-    }
+    if (location.pathname.startsWith("/admin/master")) setOpenMaster(true);
+    if (location.pathname.startsWith("/admin/report")) setOpenReport(true);
   }, [location.pathname]); 
 
   
@@ -69,7 +71,7 @@ export default function AdminLayout() {
           <span>Master Data</span>                              
           <span className="chev">{openMaster ? "▾" : "▸"}</span> 
         </button>
-
+        
         {/* sub menu: tampil hanya jika openMaster = true */}
         {openMaster && (
           <div className="nav-sub">
@@ -129,6 +131,27 @@ export default function AdminLayout() {
             className={({ isActive }) => `nav-item sub ${isActive ? "active" : ""}`}
 >
             Jadwal Mengajar
+            </NavLink>
+          </div>
+        )}
+
+        {/* menu utama : tombol dropdown Report */}
+        <button
+          className={`nav-parent ${openReport ? "open" : ""}`}
+          onClick={() => setOpenReport((p) => !p)}
+          type="button"
+        >
+          <span>Report</span>
+          <span className="chev">{openReport ? "▾" : "▸"}</span>
+        </button>
+
+        {openReport && (
+          <div className="nav-sub">
+            <NavLink
+              to="/admin/report/report-guru"
+              className={({ isActive }) => `nav-item sub ${isActive ? "active" : ""}`}
+            >
+              Report Guru
             </NavLink>
           </div>
         )}

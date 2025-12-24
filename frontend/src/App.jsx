@@ -11,6 +11,7 @@ import SiswaPage from "./pages/admin/master/siswa/SiswaPage";
 import MapelPage from "./pages/admin/master/mapel/MapelPage";
 import PendaftaranGuruPage from "./pages/admin/master/pendaftaran-guru/PendaftaranGuruPage";
 import JadwalMengajarPage from "./pages/admin/master/jadwal-mengajar/JadwalMengajarPage";
+import AdminReportGuruPage from "./pages/admin/report/report-guru/AdminReportGuruPage";
 
 import GuruLayout from "./pages/guru/GuruLayout"; 
 import GuruDashboardPage from "./pages/guru/dashboard/GuruDashboardPage"; 
@@ -42,6 +43,8 @@ function App() {
         <Route path="master/mapel" element={<MapelPage />} />
         <Route path="master/pendaftaran-guru" element={<PendaftaranGuruPage />} />
         <Route path="master/jadwal-mengajar" element={<JadwalMengajarPage />} />
+        <Route path="report/report-guru" element={<AdminReportGuruPage />} />
+
       </Route>
 
       {/* GURU */}

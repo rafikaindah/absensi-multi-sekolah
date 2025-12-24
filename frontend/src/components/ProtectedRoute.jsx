@@ -3,7 +3,9 @@ import { Navigate } from 'react-router-dom'; //komponen untuk redirect halaman
 import { AuthContext } from '../context/AuthContext'; //mengimpor AuthContext untuk akses data user
 
 export default function ProtectedRoute({ children, roles }) { //komponen untuk proteksi route
-  const { user } = useContext(AuthContext); //mengambil data user dari AuthContext
+  const { user, authReady } = useContext(AuthContext); //mengambil data user dan status auth siap dari Auth Context
+
+  if (!authReady) return null; //menunggu AuthContext selesai load
 
   if (!user) return <Navigate to="/login" />; //jika user belum login, redirect ke /login
 
