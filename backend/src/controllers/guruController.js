@@ -337,11 +337,19 @@ exports.getReportGuru = async (req, res) => {
 
 //fungsi report siswa
 exports.getReportSiswa = async (req, res) => {
-  const id_pengguna = req.user.id_pengguna;
-  const { start, end, id_sekolah, id_kelas } = req.query;
+  const { start, end, id_sekolah, id_kelas, id_pengguna } = req.query;
 
   if (!start || !end) {
     return res.status(400).json({ message: "start dan end wajib diisi" });
+  }
+
+  const targetIdPengguna =
+    req.user.peran === "admin"
+      ? (id_pengguna ? Number(id_pengguna) : null)
+      : req.user.id_pengguna;
+
+  if (req.user.peran === "admin" && !targetIdPengguna) {
+    return res.status(400).json({ message: "Admin wajib memilih guru (id_pengguna)" });
   }
 
   try {
@@ -377,7 +385,7 @@ exports.getReportSiswa = async (req, res) => {
       ORDER BY a.tanggal DESC, sk.nama_sekolah, k.nama_kelas, s.nama_lengkap
       `,
       [
-        id_pengguna,
+        targetIdPengguna,
         start,
         end,
         id_sekolah || null,
@@ -415,7 +423,7 @@ exports.getReportSiswa = async (req, res) => {
       ORDER BY c.timestamp DESC, sk.nama_sekolah, k.nama_kelas, s.nama_lengkap
       `,
       [
-        id_pengguna,
+        targetIdPengguna,
         start,
         end,
         id_sekolah || null,

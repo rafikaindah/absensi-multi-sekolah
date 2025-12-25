@@ -153,6 +153,12 @@ export default function AdminLayout() {
             >
               Report Guru
             </NavLink>
+            <NavLink
+              to="/admin/report/report-siswa"
+              className={({ isActive }) => `nav-item sub ${isActive ? "active" : ""}`}
+            >
+              Report Siswa
+            </NavLink>
           </div>
         )}
 
