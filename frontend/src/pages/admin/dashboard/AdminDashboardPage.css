@@ -1,0 +1,114 @@
+/* wrapper halaman dashboard */
+.adash { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 14px; 
+  color: #1f2937; 
+}
+
+/* baris header (hamburger + title + refresh) */
+.adash-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* tombol hamburger sidebar */
+.adash-hamburger{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 10px;
+  border: 1px solid #d7e2db;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* judul dashboard */
+.adash-title { 
+  margin: 0;
+  font-size: 28px;    
+  line-height: 1.15;
+  font-weight: 800;
+  color: #1f2d25;
+}
+
+/* tombol refresh data */
+.adash-refresh{
+  margin-left: auto; 
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid #1a5e1f;
+  background: #1a5e1f;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+/* tombol refresh disabled */
+.adash-refresh:disabled { 
+  opacity: 0.7; 
+  cursor: not-allowed; 
+}
+
+/* alert error */
+.adash-alert{
+  padding: 12px 14px; 
+  border-radius: 12px;
+  background: #fff5f5; 
+  border: 1px solid #f3b7b7; 
+  color: #b42323; 
+}
+
+/* grid card ringkasan */
+.adash-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+/* card ringkasan */
+.adash-card{
+  background: #fff;
+  border: 1px solid #dfe7e1;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+/* label kecil pada card */
+.adash-label{
+  font-size: 13px;
+  font-weight: 900;
+  color: rgba(19,32,25,0.7);
+}
+
+/* value utama pada card */
+.adash-value{
+  font-size: 26px;
+  font-weight: 900;
+  color: #132019;
+  margin-top: 6px;
+}
+
+/* keterangan tambahan (meta) pada card */
+.adash-meta{
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 850;
+  color: rgba(31,45,37,0.65);
+}
+
+/* tampilan mobile */
+@media (max-width: 768px) {
+  .adash-title {
+    font-size: 22px;
+  }
+}

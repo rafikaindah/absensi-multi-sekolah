@@ -62,6 +62,14 @@ export default function AdminLayout() {
           <div className="brand-sub">Sistem Absensi</div>  
         </div>
 
+        {/* menu utama : tombol dashboard */}
+        <NavLink
+          to="/admin/dashboard"
+          className={({ isActive }) =>`nav-parent ${isActive ? "active" : ""}`}
+        >
+          <span>Dashboard</span>
+        </NavLink>
+
         {/* menu utama : tombol dropdown Master Data */}
         <button
           className={`nav-parent ${openMaster ? "open" : ""}`} 

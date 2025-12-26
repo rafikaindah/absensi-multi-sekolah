@@ -3,6 +3,8 @@ import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import TestAuth from "./TestAuth";
 
+import AdminDashboardPage from "./pages/admin/dashboard/AdminDashboardPage";
+
 import AdminLayout from "./pages/admin/AdminLayout";
 import PenggunaPage from "./pages/admin/master/pengguna/PenggunaPage";
 import SekolahPage from "./pages/admin/master/sekolah/SekolahPage";
@@ -36,7 +38,10 @@ function App() {
           </ProtectedRoute>
         }
       >
-        <Route index element={<Navigate to="/admin/master/pengguna" />} />
+        <Route index element={<Navigate to="/admin/dashboard" />} />
+
+        <Route path="dashboard" element={<AdminDashboardPage />} />
+
         <Route path="master/pengguna" element={<PenggunaPage />} />
         <Route path="master/sekolah" element={<SekolahPage />} />
         <Route path="master/kelas" element={<KelasPage />} />
