@@ -70,6 +70,14 @@ export default function AdminLayout() {
           <span>Dashboard</span>
         </NavLink>
 
+        {/* menu utama : tombol qr sekolah */}
+        <NavLink
+          to="/admin/qr-sekolah"
+          className={({ isActive }) => `nav-parent ${isActive ? "active" : ""}`}
+        >
+          QR Sekolah
+        </NavLink>
+
         {/* menu utama : tombol dropdown Master Data */}
         <button
           className={`nav-parent ${openMaster ? "open" : ""}`} 

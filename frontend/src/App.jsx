@@ -15,6 +15,7 @@ import PendaftaranGuruPage from "./pages/admin/master/pendaftaran-guru/Pendaftar
 import JadwalMengajarPage from "./pages/admin/master/jadwal-mengajar/JadwalMengajarPage";
 import AdminReportGuruPage from "./pages/admin/report/report-guru/AdminReportGuruPage";
 import AdminReportSiswaPage from "./pages/admin/report/report-siswa/AdminReportSiswaPage";
+import AdminQrSekolahPage from "./pages/admin/qr-sekolah/AdminQrSekolahPage";
 
 import GuruLayout from "./pages/guru/GuruLayout"; 
 import GuruDashboardPage from "./pages/guru/dashboard/GuruDashboardPage"; 
@@ -51,6 +52,7 @@ function App() {
         <Route path="master/jadwal-mengajar" element={<JadwalMengajarPage />} />
         <Route path="report/report-guru" element={<AdminReportGuruPage />} />
         <Route path="report/report-siswa" element={<AdminReportSiswaPage />} />
+        <Route path="qr-sekolah" element={<AdminQrSekolahPage />} />
 
       </Route>
 

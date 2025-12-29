@@ -6,6 +6,7 @@ const authRoutes = require('./routes/authRoutes'); //mengimpor route otentikasi
 const masterRoutes = require('./routes/masterRoutes'); 
 const guruRoutes = require('./routes/guruRoutes'); 
 const adminRoutes = require('./routes/adminRoutes');
+const adminQrRoutes = require("./routes/adminQrRoutes");
 
 const app = express(); //membuat instance aplikasi express
 
@@ -27,6 +28,7 @@ app.use('/api/auth', authRoutes); //menggunakan route otentikasi
 app.use('/api/master', masterRoutes);
 app.use('/api/guru', guruRoutes);
 app.use('/api/admin', adminRoutes);
+app.use("/api/admin/qr", adminQrRoutes);
 
 const PORT = process.env.PORT || 4000; //mengatur port server
 app.listen(PORT, () => { //memulai server
