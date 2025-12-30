@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import dayjs from "dayjs";
 import { guruApi } from "../../../api/guruApi";
 import { todayHariIndo } from "../../../utils/hariIndo";
-import { emptyPresensiForm } from "./guruDashboard.model";
 
 // mengambil tanggal hari ini format YYYY-MM-DD
 const today = () => dayjs().format("YYYY-MM-DD");
@@ -12,9 +11,6 @@ export function useGuruDashboardController() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // state form presensi (mode manual: input id_sekolah)
-  const [presensiForm, setPresensiForm] = useState(emptyPresensiForm);
-
   // state semua jadwal dari API 
   const [jadwalAll, setJadwalAll] = useState([]);
 
@@ -22,12 +18,15 @@ export function useGuruDashboardController() {
   const [tanggalIni] = useState(() => today());
   const [hariIni] = useState(() => todayHariIndo());
 
-  // state sekolah aktif
-  const [activeSchool, setActiveSchool] = useState("");
   // state sesi presensi aktif per sekolah
   const [sesiBySchool, setSesiBySchool] = useState({});
   // state status selesai per jadwal
   const [selesaiByJadwal, setSelesaiByJadwal] = useState({});
+
+  //state untuk scan QR
+  const [scanOpen, setScanOpen] = useState(false); 
+  const [scanMode, setScanMode] = useState(""); 
+  const [lastScanAt, setLastScanAt] = useState(""); 
 
   // menyimpan sesi presensi per sekolah ke state
   const persistSesi = (next) => {
@@ -37,11 +36,6 @@ export function useGuruDashboardController() {
  // simpan cache selesai per jadwal ke state
   const persistSelesai = (next) => {
     setSelesaiByJadwal(next);
-  };
-
-  // set sekolah aktif ke state
-  const setActive = (id_sekolah) => {
-    setActiveSchool(id_sekolah);
   };
 
   // mengambil semua jadwal mengajar dari API
@@ -83,42 +77,47 @@ export function useGuruDashboardController() {
     return jadwalAll.filter((j) => String(j.hari) === String(hariIni));
   }, [jadwalAll, hariIni]);
 
-  // mengubah nilai input pada form presensi
-  const onChangePresensi = (key, value) => {
-    setPresensiForm((p) => ({ ...p, [key]: value }));
+  // buka kamera checkin/checkout
+  const openScanFor = (mode) => {
+    setError("");
+    setScanMode(mode); 
+    setScanOpen(true);
   };
 
-  // proses check-in presensi guru berdasarkan id_sekolah (mode manual)
+  // proses check-in membuka kamera (scan)
   const handleCheckin = async () => {
-    setError("");
-    const id_sekolah = String(presensiForm.id_sekolah || "").trim();
-    if (!id_sekolah) return setError("id_sekolah wajib diisi (mode manual).");
-
-    try {
-      await guruApi.checkin({ id_sekolah });
-
-      await Promise.all([syncPresensiHariIni(), syncSelesaiHariIni()]);
-
-      setActive(id_sekolah);
-    } catch (e) {
-      setError(e.response?.data?.message || "Gagal check-in");
-    }
+    openScanFor("checkin");
   };
 
-  // proses check-out presensi guru berdasarkan id_sekolah (mode manual)
+  // proses check-out membuka kamera (scan)
   const handleCheckout = async () => {
-    setError("");
-    const id_sekolah = String(presensiForm.id_sekolah || "").trim();
-    if (!id_sekolah) return setError("id_sekolah wajib diisi (mode manual).");
+    openScanFor("checkout");
+  };
+
+  // callback saat QR berhasil di scan
+  const onScanQr = async (decodedText) => {
+    setScanOpen(false);
+    setLastScanAt(dayjs().format("YYYY-MM-DD HH:mm:ss")); // ✅ timestamp scan
 
     try {
-      await guruApi.checkout({ id_sekolah });
+      setLoading(true);
+      setError("");
+
+      if (scanMode === "checkin") {
+        await guruApi.checkin({ qr_payload: decodedText }); // ✅
+      } else if (scanMode === "checkout") {
+        await guruApi.checkout({ qr_payload: decodedText }); // ✅
+      } else {
+        throw new Error("Mode scan tidak dikenal");
+      }
 
       await Promise.all([syncPresensiHariIni(), syncSelesaiHariIni()]);
 
-      setActive(id_sekolah);
     } catch (e) {
-      setError(e.response?.data?.message || "Gagal check-out");
+      setError(e.response?.data?.message || "Gagal memproses QR");
+    } finally {
+      setLoading(false);
+      setScanMode(""); 
     }
   };
 
@@ -169,8 +168,7 @@ export function useGuruDashboardController() {
 
   return {
     loading, error, setError,
-    presensiForm, onChangePresensi,
-    activeSchool, sesiBySchool,
+    sesiBySchool,
     hariIni, tanggalIni,
     jadwalHariIni,
     handleCheckin,
@@ -183,5 +181,12 @@ export function useGuruDashboardController() {
 
     syncPresensiHariIni,
     syncSelesaiHariIni,
+
+    scanOpen, 
+    setScanOpen, 
+    scanMode, 
+    openScanFor, 
+    onScanQr, 
+    lastScanAt,
   };
 }

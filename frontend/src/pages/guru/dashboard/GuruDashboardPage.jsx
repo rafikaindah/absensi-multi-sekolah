@@ -1,6 +1,7 @@
 import { useOutletContext, useNavigate } from "react-router-dom";
 import { useGuruDashboardController } from "./guruDashboard.controller";
 import "./GuruDashboardPage.css";
+import QrScannerModal from "../../../components/QrScannerModal";
 
 export default function GuruDashboardPage() {
   const { toggleSidebar } = useOutletContext();
@@ -9,6 +10,13 @@ export default function GuruDashboardPage() {
 
   return (
     <div className="gpage">
+      {/* modal scan QR */}
+      <QrScannerModal
+        open={c.scanOpen} 
+        onClose={() => c.setScanOpen(false)} 
+        title={c.scanMode === "checkout" ? "Scan QR untuk Check-out" : "Scan QR untuk Check-in"} 
+        onScan={c.onScanQr} 
+      />
       {/* Header halaman */}
       <div className="gpage-header">
         <div className="gtitle-row">
@@ -41,15 +49,6 @@ export default function GuruDashboardPage() {
             <h2>Presensi Guru Hari Ini</h2>
           </div>
 
-          {/* input id_sekolah untuk check-in/check-out */}
-          <div className="gform-row">
-            <input
-              value={c.presensiForm.id_sekolah}
-              onChange={(e) => c.onChangePresensi("id_sekolah", e.target.value)}
-              placeholder="Contoh: 1"
-            />
-          </div>
-
           {/* tombol check-in dan check-out */}
           <div className="gbtn-row">
             <button className="gprimary" onClick={c.handleCheckin}>
@@ -58,11 +57,6 @@ export default function GuruDashboardPage() {
             <button className="gbtn" onClick={c.handleCheckout}>
               Check-out
             </button>
-          </div>
-
-          {/* menampilkan sekolah yang sedang aktif */}
-          <div className="gmini">
-            Sekolah aktif: <b>{c.activeSchool ? `Id ${c.activeSchool}` : "-"}</b>
           </div>
         </div>
 

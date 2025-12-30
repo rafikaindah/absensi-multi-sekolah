@@ -1,5 +1,6 @@
 const pool = require('../config/db'); //mengimpor konfigurasi database
 const dayjs = require('dayjs'); //mengimpor dayjs untuk mengatur tanggal dan waktu
+const { verifySchoolQr } = require('../utils/qrSchool'); //mengambil id_sekolah dari qr_payload
 
 //fungsi untuk mendapatkan tanggal hari ini dalam format YYYY-MM-DD
 const todayDate = () => dayjs().format('YYYY-MM-DD');
@@ -12,10 +13,18 @@ const todayHari = () => { //fungsi untuk mendapatkan nama hari ini
 
 // fungsi untuk melakukan checkin guru
 exports.checkin = async (req, res) => {
-  const { id_sekolah } = req.body; ///mengambil id_sekolah dari body request dari QR code
+  const { qr_payload } = req.body; ///mengambil payload hasil scan QR
   const id_pengguna = req.user.id_pengguna; //mengambil id_pengguna dari token autentikasi
 
   try {
+    if (!qr_payload) { 
+      return res.status(400).json({ message: "qr_payload wajib diisi" });
+    }
+
+    //validasi QR dan  mengambil sekolah dari uuid
+    const sekolah = await verifySchoolQr(qr_payload);
+    const id_sekolah = String(sekolah.id_sekolah);
+
     // Cek apakah punya jadwal di hari ini di sekolah ini
     const [jadwal] = await pool.query(
       `SELECT j.id_jadwal
@@ -56,19 +65,35 @@ exports.checkin = async (req, res) => {
     res.status(201).json({
       message: 'Check-in berhasil',
       id_sesi: result.insertId,
+      id_sekolah,
+      nama_sekolah: sekolah.nama_sekolah,
     });
   } catch (err) {
     console.error(err);
+
+    //jika error dari QR
+    if (String(err?.message || "").toLowerCase().includes("qr")) {
+      return res.status(400).json({ message: err.message });
+    }
+
     res.status(500).json({ message: 'Gagal check-in' });
   }
 };
 
 // fungsi untuk melakukan checkout guru
 exports.checkout = async (req, res) => {
-  const { id_sekolah } = req.body; //mengambil id_sekolah dari body request dari QR code/id sesi
+  const { qr_payload } = req.body; //mengambil payload hasil scan QR
   const id_pengguna = req.user.id_pengguna; //mengambil id_pengguna dari token autentikasi
 
   try {
+    if (!qr_payload) {
+      return res.status(400).json({ message: "qr_payload wajib diisi" });
+    }
+
+    //validasi QR dan mengambil sekolah dari uuid
+    const sekolah = await verifySchoolQr(qr_payload);
+    const id_sekolah = String(sekolah.id_sekolah);
+
     // Cek apakah punya jadwal di hari ini di sekolah ini
     const [jadwal] = await pool.query(
       `SELECT j.id_jadwal
@@ -106,9 +131,20 @@ exports.checkout = async (req, res) => {
       [id_sesi]
     );
 
-    res.json({ message: 'Check-out berhasil', id_sesi });
+    res.json({ 
+      message: 'Check-out berhasil', 
+      id_sesi,
+      id_sekolah,
+      nama_sekolah: sekolah.nama_sekolah,
+     });
   } catch (err) {
     console.error(err);
+
+    //jika error dari QR
+    if (String(err?.message || "").toLowerCase().includes("qr")) {
+      return res.status(400).json({ message: err.message });
+    }
+    
     res.status(500).json({ message: 'Gagal check-out' });
   }
 };

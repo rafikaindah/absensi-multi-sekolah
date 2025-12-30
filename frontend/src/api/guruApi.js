@@ -1,8 +1,8 @@
 import api from "./axiosClient";
 
 export const guruApi = {
-  checkin: (payload) => api.post("/guru/checkin", payload),     // {id_sekolah}
-  checkout: (payload) => api.post("/guru/checkout", payload),   // {id_sekolah}
+  checkin: (payload) => api.post("/guru/checkin", payload),     // { qr_payload }
+  checkout: (payload) => api.post("/guru/checkout", payload),   // { qr_payload }
 
   getJadwalHariIni: (params) => api.get("/guru/jadwal-hari-ini", { params }),
   getSemuaJadwal: () => api.get("/guru/jadwal-semua"),
