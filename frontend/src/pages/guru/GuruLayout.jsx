@@ -19,8 +19,6 @@ export default function GuruLayout() {
     // hapus info login dari localStorage
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    // hapus data sekolah & sesi guru agar login ulang mulai dari nol
-    localStorage.removeItem("guru_sesi_by_school");
     navigate("/login");
   };
 
@@ -45,8 +43,8 @@ export default function GuruLayout() {
 
         {/* bagian brand/judul sidebar */}
         <div className="guru-brand">
-          <div className="guru-brand-title">Dashboard Guru</div>
-          <div className="guru-brand-sub">Multi Sekolah</div>
+          <div className="guru-brand-title">Guru Panel</div>
+          <div className="guru-brand-sub">Sistem Absensi</div>
         </div>
 
         {/* menu navigasi */}

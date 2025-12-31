@@ -93,7 +93,7 @@ export default function AdminDashboardPage() {
             {loading ? "…" : `${presensi.hadir} hadir`}
           </div>
           <div className="adash-meta">
-            {loading ? "" : `${presensi.belumCheckin} belum check-in (Total ${presensi.totalGuru})`}
+            {loading ? "" : `Total ${presensi.totalGuru}`}
           </div>
         </div>
 
