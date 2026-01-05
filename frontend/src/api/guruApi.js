@@ -20,6 +20,4 @@ export const guruApi = {
   getPresensiHariIni: (params) => api.get("/guru/presensi-hari-ini", { params }),
   getJadwalSelesaiHariIni: (params) => api.get("/guru/jadwal-selesai-hari-ini", { params }),
 
-  getSekolahByGuru: (id_pengguna) => api.get(`/guru/sekolah/guru/${id_pengguna}`),
-
 };

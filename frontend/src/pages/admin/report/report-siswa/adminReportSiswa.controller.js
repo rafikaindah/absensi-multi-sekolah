@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { adminReportApi } from "../../../../api/adminReportApi";
 import { masterApi } from "../../../../api/masterApi";
-import { guruApi } from "../../../../api/guruApi"; 
 import { defaultFilter } from "./adminReportSiswa.model";
 
 //format tanggal
@@ -61,7 +60,7 @@ export function useAdminReportSiswaController() {
         setSekolahList([]);
         return;
       }
-      const res = await guruApi.getSekolahByGuru(id_pengguna);
+      const res = await adminReportApi.getSekolahByGuru(id_pengguna);
       setSekolahList(
         (res.data || []).map((s) => ({
           id_sekolah: String(s.id_sekolah),
