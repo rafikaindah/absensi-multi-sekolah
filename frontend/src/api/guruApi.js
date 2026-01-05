@@ -1,4 +1,4 @@
-import api from "./axiosClient";
+import api from "./axiosGuru";
 
 export const guruApi = {
   checkin: (payload) => api.post("/guru/checkin", payload),     // { qr_payload }

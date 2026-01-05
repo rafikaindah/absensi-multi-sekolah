@@ -1,4 +1,4 @@
-import api from "./axiosClient";
+import api from "./axiosAdmin";
 
 export const adminReportApi = {
   reportGuru: (params) => api.get("/guru/report-guru", { params }),

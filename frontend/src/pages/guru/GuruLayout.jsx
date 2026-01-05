@@ -17,8 +17,8 @@ export default function GuruLayout() {
 
   const handleLogout = () => {
     // hapus info login dari localStorage
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.removeItem("token_guru");
+    localStorage.removeItem("user_guru");
     navigate("/login");
   };
 

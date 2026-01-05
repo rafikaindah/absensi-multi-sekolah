@@ -13,8 +13,7 @@ export default function LoginPage() { //komponen halaman login
   const handleSubmit = async (e) => { //fungsi yang berjalan saat form disubmit
     e.preventDefault(); //mencegah refresh halaman bawaan form
     try {
-      await login(email, password); //memanggil fungsi login dari AuthContext
-      const user = JSON.parse(localStorage.getItem('user')); //mengambil data user dari localStorage
+      const user = await login(email, password); //memanggil fungsi login dengan email dan password
       if (user.peran === 'admin') navigate('/admin');//masuk ke halaman admin
       else navigate('/guru');//masuk ke halaman guru
     } catch (err) {

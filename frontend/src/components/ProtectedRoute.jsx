@@ -1,13 +1,19 @@
-import { useContext } from 'react'; //mengimpor useContext untuk membaca AuthContext
-import { Navigate } from 'react-router-dom'; //komponen untuk redirect halaman
-import { AuthContext } from '../context/AuthContext'; //mengimpor AuthContext untuk akses data user
+import { Navigate } from 'react-router-dom'; //komponen untuk redirect halaman  
 
-export default function ProtectedRoute({ children, roles }) { //komponen untuk proteksi route
-  const { user, authReady } = useContext(AuthContext); //mengambil data user dan status auth siap dari Auth Context
+export default function ProtectedRoute({ children, roles }) {
+  // ambil data user dari localStorage sesuai rolenya
+  const role = roles?.[0];
 
-  if (!authReady) return null; //menunggu AuthContext selesai load
+  // tentukan key localStorage berdasarkan role
+  const tokenKey = role === "admin" ? "token_admin" : "token_guru";
+  const userKey  = role === "admin" ? "user_admin"  : "user_guru";
 
-  if (!user) return <Navigate to="/login" />; //jika user belum login, redirect ke /login
+  // ambil token dan user dari localStorage
+  const token = localStorage.getItem(tokenKey);
+  const userRaw = localStorage.getItem(userKey);
+  const user = userRaw ? JSON.parse(userRaw) : null;
+
+  if (!token || !user) return <Navigate to="/login" />; //jika user belum login, redirect ke /login
 
   if (roles && !roles.includes(user.peran)) { //jika halaman butuh role tertentu dan user tidak cocok
     return <div>Akses ditolak</div>; //tampilkan pesan bahwa akses tidak diizinkan
@@ -15,3 +21,4 @@ export default function ProtectedRoute({ children, roles }) { //komponen untuk p
 
   return children; //jika lolos semua pengecekan, tampilkan halaman
 }
+ 

@@ -5,7 +5,7 @@ const api = axios.create({ //membuat instance axios
 });
 
 api.interceptors.request.use((config) => { //menambahkan interceptor untuk setiap request
-  const token = localStorage.getItem('token'); //mengambil token dari localStorage
+  const token = localStorage.getItem('token_admin'); //mengambil token admin dari localStorage
   if (token) {
     config.headers.Authorization = `Bearer ${token}`; //menambahkan header Authorization jika token ada
   }

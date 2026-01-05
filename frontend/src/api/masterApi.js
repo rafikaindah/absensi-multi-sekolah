@@ -1,4 +1,4 @@
-import api from "./axiosClient";
+import api from "./axiosAdmin";
 
 export const masterApi = {
   // PENGGUNA
