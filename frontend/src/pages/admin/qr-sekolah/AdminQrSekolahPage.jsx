@@ -116,7 +116,7 @@ export default function AdminQrSekolahPage() {
       {/* header (hamburger + judul + tombol refresh) */}
       <div className="aqr-headbar">
         {/* tombol hamburger */}
-        <button className="adash-hamburger" onClick={toggleSidebar}>☰</button>
+        <button className="aqr-hamburger" onClick={toggleSidebar}>☰</button>
 
          {/* judul halaman */}
         <div>

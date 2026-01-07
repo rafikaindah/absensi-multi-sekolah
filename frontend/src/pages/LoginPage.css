@@ -41,6 +41,8 @@
   border-radius: 6px;
   font-size: 14px;
   transition: 0.2s;
+  background: #fff;         
+  color: #222; 
 }
 
 .login-card input:focus {
