@@ -45,6 +45,7 @@
   font-weight: 900;
   font-size: 18px;
   line-height: 1;
+  color: #222;
 }
 
 /* box error */
@@ -115,6 +116,7 @@
   background: #fff;
   cursor: pointer;
   font-weight: 900;
+  color: #222;
 }
 
 /* tampilan tombol utama kalau disabled */

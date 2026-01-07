@@ -29,6 +29,7 @@
   font-weight: 900;
   font-size: 18px;
   line-height: 1;
+  color: #222;
 }
 
 /* judul halaman */
@@ -70,7 +71,7 @@
   font-weight: 900; 
   font-size: 13px; 
   color: #2b3a31; 
-  margin-bottom: 6px; 
+  margin-bottom: 6px;
 }
 
 /* input date */
@@ -80,6 +81,16 @@
   border: 1px solid #d7e2db; 
   padding: 0 12px; 
   outline: none;
+  background: #fff;
+  color: #222;
+}
+
+.rfield input[type="date"]{
+  background: #fff;
+  color: #222;
+  border: 1px solid #d7e2db;
+
+  color-scheme: light;
 }
 
 /* tombol terapkan filter */
@@ -137,7 +148,9 @@
 /* kolom materi dan catatan */
 .rdesc { 
   max-width: 520px; 
-  white-space: pre-wrap; 
+  white-space: pre-wrap;
+  background: #fff;
+  color: #222; 
 }
 
 /* select dropdown sekolah */
@@ -149,6 +162,7 @@
   outline: none;
   background: #fff;
   font-weight: 800;
+  color: #222;
 }
 
 /* grup sekolah+ kelas*/

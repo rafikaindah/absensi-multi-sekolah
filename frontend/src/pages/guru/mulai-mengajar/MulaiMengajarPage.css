@@ -49,6 +49,7 @@ label, p {
   border-bottom: 1px solid #e8eeea;   
   background: #fff;
   vertical-align: middle;
+  color: #222;
 }
 
 .gtable th:last-child,
@@ -63,6 +64,7 @@ label, p {
   border-radius: 10px;
   border: 1px solid #d7e2db;
   background: #fff;
+  color: #222;
 }
 
 /* textarea jurnal */
@@ -76,6 +78,8 @@ textarea{
   border: 1px solid #d7e2db;
   font: inherit;               
   resize: vertical;
+  background: #fff;
+  color: #222;
 }
 
 /* catatan siswa*/
@@ -89,6 +93,12 @@ textarea{
 
 .gcatatan input, .gcatatan select, .gcatatan textarea, .gcatatan button{
   font: inherit;
+  background: #fff;
+  color: #222;
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid #d7e2db;
 }
 
 /* tombol simpan & selesai */
