@@ -93,10 +93,10 @@ export default function AdminQrSekolahPage() {
     //reset interval sebelumnya
     if (timerRef.current) clearInterval(timerRef.current);
 
-    //auto refresh QR tiap 5 detik 
+    //auto refresh QR tiap 1 detik 
     timerRef.current = setInterval(() => {
       refreshQr(uuid);
-    }, 5000);
+    }, 1000);
 
     //cleanup saat uuid berubah / komponen unmount
     return () => {

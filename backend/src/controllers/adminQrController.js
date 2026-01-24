@@ -1,8 +1,8 @@
 const pool = require("../config/db");
 const crypto = require("crypto");
 
-//membulatkan waktu ke slot 10 menit
-const slot10m = (epochSec) => Math.floor(epochSec / 600) * 600;
+//membulatkan waktu ke slot 15 detik 
+const slot15s = (epochSec) => Math.floor(epochSec / 15) * 15;
 
 //membuat signature (HMAC) untuk validasi QR
 const sign = (uuid, ts) => {
@@ -31,10 +31,10 @@ exports.getQrSekolah = async (req, res) => {
 
     const sekolah = rows[0];
 
-    //membuat timestamp slot 10 menit + waktu kadaluarsa 
+    //membuat timestamp slot 15 detik + waktu kadaluarsa 
     const now = Math.floor(Date.now() / 1000);
-    const ts = slot10m(now);
-    const expiresAt = ts + 600; 
+    const ts = slot15s(now);
+    const expiresAt = ts + 15; 
 
     //payload QR (isi data yang akan discan) 
     const payloadObj = {
