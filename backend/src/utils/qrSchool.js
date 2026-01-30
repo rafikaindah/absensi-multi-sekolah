@@ -1,8 +1,8 @@
 const crypto = require("crypto");
 const pool = require("../config/db");
 
-//membulatkan waktu ke slot 10 menit
-const slot10m = (t) => Math.floor(t / 600) * 600;
+//membulatkan waktu ke slot 15 detik 
+const slot15s = (t) => Math.floor(t / 15) * 15;
 
 //membuat signature (HMAC) untuk validasi QR
 const sign = (uuid, ts) =>
@@ -19,9 +19,9 @@ exports.verifySchoolQr = async (qr_payload) => {
   //tipe QR harus "school"
   if (type !== "school") throw new Error("QR tidak valid");
 
-  //expired QR hanya valid untuk slot 10 menit sekarang/sebelumnya
+  //expired QR hanya valid untuk slot 15 detik sekarang/sebelumnya
   const now = Math.floor(Date.now() / 1000);
-  const allowed = [slot10m(now), slot10m(now) - 600];
+  const allowed = [slot15s(now), slot15s(now) - 15];
   if (!allowed.includes(ts)) throw new Error("QR kadaluarsa");
 
   //cek signature
